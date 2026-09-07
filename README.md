@@ -99,4 +99,12 @@ Generated models, maps, figures, logs, response curves, statistics and cached st
 
 ## Licence and citation
 
-No open-source licence is asserted by this cleanup. Confirm institutional and collaborator approval, then add an explicit licence before publishing; without one, normal copyright restrictions apply. Add the article DOI, software release DOI and final citation metadata when they are available.
+The source code in this repository is released under the BSD 3-Clause License. See LICENSE for the full licence terms.
+
+Unless explicitly stated otherwise, this licence applies to the software, configuration files and original documentation contained in this repository. It does not grant rights to third-party datasets or other externally sourced materials. GBIF, RRN, SNCF, environmental, administrative and other input datasets remain subject to the licences, terms of use and access restrictions imposed by their respective data providers.
+
+No restricted research data are distributed with this repository.
+
+If you use this software in scientific work, please cite the associated publication and, where applicable, the archived software release. Citation information will be provided in CITATION.cff.
+
+Copyright © 2026 Adrian Meyer and contributors.
