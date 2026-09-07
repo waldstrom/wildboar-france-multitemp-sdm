@@ -97,7 +97,19 @@ Continuous integration performs the data-free repository check and compiles all 
 
 Generated models, maps, figures, logs, response curves, statistics and cached stacks belong in ignored local directories. See [`outputs/README.md`](outputs/README.md) for archiving guidance.
 
-## Licence and citation
+## Citation
+
+If you use this code or workflow in scientific work, please cite the associated preprint:
+
+Meyer AF, Reibel T, Morelle K, Kneubühler M, Jordan D (2026) Wild Boar Collision Data and Satellite Computer Vision Refine Habitat Suitability Mapping across France. Research Square, Version 1. https://doi.org/10.21203/rs.3.rs-8798859/v1
+
+The preprint is available at Research Square and is licensed separately under CC BY 4.0.
+
+For software-specific citation metadata, see CITATION.cff. When citing a specific archived software release, please additionally cite the corresponding release DOI if available.
+
+Copyright © 2026 Adrian Ferdinand Meyer and contributors.
+
+## Licence 
 
 The source code in this repository is released under the BSD 3-Clause License. See LICENSE for the full licence terms.
 
