@@ -97,10 +97,6 @@ Continuous integration performs the data-free repository check and compiles all 
 
 Generated models, maps, figures, logs, response curves, statistics and cached stacks belong in ignored local directories. See [`outputs/README.md`](outputs/README.md) for archiving guidance.
 
-## Sharing this code safely
-
-The historical private repository previously tracked data. Removing those files from the current tree does not remove them from Git history. **Do not make the existing historical repository public.** Use the supplied export scripts to create a history-free directory and initialise that directory as a new public repository. The complete procedure is in [`docs/PUBLIC_RELEASE.md`](docs/PUBLIC_RELEASE.md).
-
 ## Licence and citation
 
 No open-source licence is asserted by this cleanup. Confirm institutional and collaborator approval, then add an explicit licence before publishing; without one, normal copyright restrictions apply. Add the article DOI, software release DOI and final citation metadata when they are available.
