@@ -1,0 +1,997 @@
+# =============================================================================
+# Project Title: Wild Boar Distribution Model for France
+# Path: config_gbm-compare.yaml
+# Purpose: Aggregate configuration housing the four seasonal pipelines used for
+#          GBM vs MaxEnt comparisons.
+# Process Step: Allows meta_run.py to iterate winter/summer and
+#               multi-/monotemporal scenarios from a single YAML document.
+# Created by Adrian Meyer, Institute Geomatics, FHNW (adrian.meyer@fhnw.ch)
+# Created: July 2025
+# Version: v.0.1.0
+# =============================================================================
+
+meta:
+  description: |
+    Central configuration that bundles the individual scenario definitions
+    used for GBM vs MaxEnt comparisons. Each scenario mirrors the previous
+    standalone YAML files (configmultitemporal_winter.yaml,
+    configwinter_monotemporal.yaml, configmultitemporal_summer.yaml and
+    configsummer_monotemporal.yaml).
+    The combinations explicitly cover two seasons (winter and summer),
+    two temporal modes (multitemporal and monotemporal) and two modelling
+    engines (elapid MaxEnt and GBM), yielding eight comparable runs when all
+    variants are executed for the 2021 test year.
+  seasons: [winter, summer]
+  temporal_modes: [multitemporal, monotemporal]
+  engines: [elapid, gbm]
+  test_year: 2021
+
+scenarios:
+  - key: winter_multitemporal
+    label: Winter multitemporal
+    script: multitemporal
+    config:
+      # =============================================================================
+      # Project Title: Wild Boar Distribution Model for France
+      # Path: configmultitemporal_winter.yaml
+      # Purpose: Configuration for multitemporal seasonal models (winter example).
+      # Process Step: Governs 3x2 stacking of seasonal rasters and model settings.
+      # Created by Adrian Meyer, Institute Geomatics, FHNW (adrian.meyer@fhnw.ch)
+      # Created: July 2025
+      # Version: v.0.1.0
+      # =============================================================================
+      
+      experiment:
+        name: winter_multitemporal
+        random_seed: 42
+      
+      run_test_year: 2021  # options: all, 2017, 2018, 2019, 2020, 2021, 2022, 2023
+      
+      export_java_compatible_input_data: true
+      
+      multitemporal:
+        seasons: ["Winter"]          # Seasons to process
+        years: [2017, 2018, 2019, 2020, 2021, 2022, 2023]
+        shift_km: 1000               # Spatial offset between copies
+        stack_pattern: data/stacks/{season}_{year}.zarr
+        include_hunting: true       # Toggle hunting bag predictor
+        ignore_featureconfig_drop: false
+        output_dir: outputs/multitemporal
+        background_per_year: 15000
+        validation_fraction: 0.1
+        vif:
+          enable: true
+          n_satellite: 4
+          n_bioclim: 4
+          n_era5: 4
+          sample_fraction: 0.05
+          feature_config: featureconfig.yaml
+      
+      presence_data:
+        file: data/allpoints.csv
+        crs: EPSG:2154
+        year_column: year
+        season_column: season
+        thinning:
+          enable: true
+          equalize_counts: false
+          percentages:
+            Winter:
+              GBIF:
+                2017: 0.2
+                2018: 0.6
+                2019: 0.8
+                2020: 0.6
+                2021: 0.4
+                2022: 0.2
+                2023: 0.6
+              RRN:
+                2017: 0.8
+                2018: 0.4
+                2019: 0.4
+                2020: 0.6
+                2021: 0.4
+                2022: 0.2
+                2023: 0.2
+              SNCF:
+                2017: 0.2
+                2018: 0.2
+                2019: 0.2
+                2020: 0.8
+                2021: 0.6
+                2022: 0.8
+                2023: 0.6
+      
+      boundary_mask: data/boundary_france.asc
+      
+      bias_grid:
+        enable: true
+        pattern: data/bias-maps/Combined_{year}-{season}.asc
+        output_file: outputs/bias/bias.tif
+      
+      background:
+        use_bias_grid: true
+        bias_strength: 0.6
+      
+      predictors:
+        target_resolution_m: 1000
+        resampling_method:
+          continuous: bilinear
+          categorical: nearest
+        nodata_value: -9999
+        variable_selection:
+          correlation_cutoff: 0.7
+          vif_threshold: 12
+          linkage: average
+          sample_fraction: 0.01
+          reference_year: 2022
+          lc_reference_year_only: true
+          save_selected_list: outputs/selected_predictors.txt
+          feature_config: featureconfig.yaml
+      
+        layers:
+          bioclim:
+            files:
+              - data/bioclim/bio01-ann_mean_temp.asc
+              - data/bioclim/bio02_mean_diurnal_range.asc
+              - data/bioclim/bio03_isothermality.asc
+              - data/bioclim/bio04_temp_seasonality.asc
+              - data/bioclim/bio06_min_temp_coldest_m.asc
+              - data/bioclim/bio07_temp_ann_range.asc
+              - data/bioclim/bio11_mean_temp_coldest_q.asc
+              - data/bioclim/bio12_ann_precip.asc
+              - data/bioclim/bio13_precip_wettest.asc
+              - data/bioclim/bio14_precip_driest.asc
+              - data/bioclim/bio15_precip_seasonality.asc
+              - data/bioclim/bio16_precip_wettest_q.asc
+              - data/bioclim/bio17_precip_driest_q.asc
+              - data/bioclim/bio19_precip_coldest_q.asc
+          landcover_fraction:
+            pattern: data/land-cover/{year}_class{class}.asc
+            years: [2017, 2018, 2019, 2020, 2021, 2022, 2023]
+            classes:
+              # - 1_WHEAT
+              - 2_CORNMAIZ
+              # - 3_BARLEY
+              # - 4_RAPESEED
+              - 5_AGRILAND
+              - 6_GRASSLND
+              - 7_OAKGROVE
+              - 8_CONIFERS
+              - 9_MIXFORST
+              - 10_BEECHGRV
+              # - 11_URBAN
+              - 12_WATER
+          landcover_distance:
+            pattern: data/lc-distances/{year}_class{class}_distance.asc
+            years: [2017, 2018, 2019, 2020, 2021, 2022, 2023]
+            classes:
+              #- 1_WHEAT
+              - 2_CORNMAIZ
+              #- 3_BARLEY
+              #- 4_RAPESEED
+              - 5_AGRILAND
+              - 6_GRASSLND
+              - 7_OAKGROVE
+              - 8_CONIFERS
+              - 9_MIXFORST
+              - 10_BEECHGRV
+              # - 11_URBAN
+              - 12_WATER
+          veg_index:
+            pattern: data/sat-indices/{index}/{year}_{month}_{index_lc}.tif
+            years: [2017, 2018, 2019, 2020, 2021, 2022, 2023]
+            months: [10]
+            indices: [BSI, EVI, EVI2, NBR, NDBI, NDMI, NDSI, NDVI, NDWI, VSSI]
+          era5:
+            pattern: data/era5/*_{year}_{season}_*.asc
+            years: [2017, 2018, 2019, 2020, 2021, 2022, 2023]
+            seasons: [summer, winter]
+          hunting_bag:
+            pattern: data/hunting-bag/hunting_bag_{year}.asc
+            years: [2017, 2018, 2019, 2020, 2021, 2022, 2023]
+          theia_special:
+            files:
+              - data/theia-special/LC01_Dense_Urbanization.asc
+              - data/theia-special/LC14_Fruit_Orchards.asc
+              - data/theia-special/LC15_Vineyards.asc
+              - data/theia-special/LC19_Natural_Heath.asc
+            categorical: false
+          special:
+            files:
+              - data/special/fragmentation_density.asc
+              - data/special/small_woody_features.asc
+              - data/special/Zones_humides_INPN.asc
+          dem:
+            - data/dem/DEM_Altitude.asc
+            - data/dem/DEM_Slope.asc
+            - data/dem/DEM_Aspect.asc
+      
+      maxent:
+        engine: elapid
+        output_type: cloglog
+        feature_types: [linear, hinge, quadratic, product]
+        product_features: true       # Toggle inclusion of product features
+        n_hinge_features: auto
+        regularization_multiplier: 1.8
+        beta_lqp: 1               # elapid-specific shape parameter
+        max_iterations: 1500
+        threads: -1
+
+      gbm:
+        boosting_type: gbdt
+        objective: binary
+        metric: [auc]
+        learning_rate: 0.03
+        num_leaves: 40
+        max_depth: 6
+        min_data_in_leaf: 48
+        feature_fraction: 0.8
+        bagging_fraction: 0.65
+        bagging_freq: 1
+        lambda_l1: 0.2
+        lambda_l2: 3.0
+        min_gain_to_split: 0.01
+        num_boost_round: 1600
+        early_stopping_rounds: 100
+        validation_fraction: 0.2
+        verbose_eval: 200
+        num_threads: -1
+        calibration:
+          enable: true
+          method: platt
+          dataset: validation
+          regularization: 1000
+
+      prediction:
+        export_geotiff: true
+      
+      evaluation:
+        classification_threshold: auto
+        cross_validation:
+          enable: false
+          method: spatial_block
+          params:
+            k_folds: 5
+            block_size_km: 50
+      
+      variable_importance:
+        permutation:
+          enable: true
+          n_repeats: 2
+      
+      outputs:
+        root: outputs/
+        logs_dir: outputs/logs/
+        model_dir: outputs/models/
+        maps_dir: outputs/maps/
+        figures_dir: outputs/figures/
+        model_paths:
+          elapid: outputs/models/winter_multitemporal_elapid.pkl
+          gbm: outputs/models/winter_multitemporal_gbm.pkl
+
+  - key: winter_monotemporal
+    label: Winter monotemporal
+    script: monotemporal
+    config:
+      # =============================================================================
+      # Project Title: Wild Boar Distribution Model for France
+      # Path: configwinter_monotemporal.yaml
+      # Purpose: Configuration for monotemporal seasonal models (winter example).
+      # Process Step: Governs 1x1 averaged stacking of seasonal rasters and model settings.
+      # Created by Adrian Meyer, Institute Geomatics, FHNW (adrian.meyer@fhnw.ch)
+      # Created: July 2025
+      # Version: v.0.1.0
+      # =============================================================================
+      
+      experiment:
+        name: winter_monotemporal
+        random_seed: 42
+      
+      monotemporal: true
+      
+      run_test_year: 2021  # options: all, 2017, 2018, 2019, 2020, 2021, 2022, 2023
+      
+      export_java_compatible_input_data: true
+      
+      multitemporal:
+        seasons: ["Winter"]          # Seasons to process
+        years: [2017, 2018, 2019, 2020, 2021, 2022, 2023]
+        shift_km: 1000               # Spatial offset between copies
+        stack_pattern: data/stacks/{season}_{year}.zarr
+        include_hunting: false       # Toggle hunting bag predictor
+        ignore_featureconfig_drop: false
+        output_dir: outputs/multitemporal
+        background_per_year: 15000
+        validation_fraction: 0.1
+        vif:
+          enable: true
+          n_satellite: 4
+          n_bioclim: 4
+          n_era5: 4
+          sample_fraction: 0.05
+          feature_config: featureconfig.yaml
+      
+      presence_data:
+        file: data/allpoints.csv
+        crs: EPSG:2154
+        year_column: year
+        season_column: season
+        thinning:
+          enable: true
+          equalize_counts: false
+          percentages:
+            Winter:
+              GBIF:
+                2017: 0.2
+                2018: 0.6
+                2019: 0.8
+                2020: 0.6
+                2021: 0.4
+                2022: 0.2
+                2023: 0.6
+              RRN:
+                2017: 0.8
+                2018: 0.4
+                2019: 0.4
+                2020: 0.6
+                2021: 0.4
+                2022: 0.2
+                2023: 0.2
+              SNCF:
+                2017: 0.2
+                2018: 0.2
+                2019: 0.2
+                2020: 0.8
+                2021: 0.6
+                2022: 0.8
+                2023: 0.6
+      
+      boundary_mask: data/boundary_france.asc
+      
+      bias_grid:
+        enable: true
+        pattern: data/bias-maps/Combined_{year}-{season}.asc
+        output_file: outputs/bias/bias.tif
+      
+      background:
+        use_bias_grid: true
+        bias_strength: 0.6
+      
+      predictors:
+        target_resolution_m: 1000
+        resampling_method:
+          continuous: bilinear
+          categorical: nearest
+        nodata_value: -9999
+        variable_selection:
+          correlation_cutoff: 0.7
+          vif_threshold: 12
+          linkage: average
+          sample_fraction: 0.01
+          reference_year: 2022
+          lc_reference_year_only: true
+          save_selected_list: outputs/selected_predictors.txt
+          feature_config: featureconfig.yaml
+      
+        layers:
+          bioclim:
+            files:
+              - data/bioclim/bio01-ann_mean_temp.asc
+              - data/bioclim/bio02_mean_diurnal_range.asc
+              - data/bioclim/bio03_isothermality.asc
+              - data/bioclim/bio04_temp_seasonality.asc
+              - data/bioclim/bio06_min_temp_coldest_m.asc
+              - data/bioclim/bio07_temp_ann_range.asc
+              - data/bioclim/bio11_mean_temp_coldest_q.asc
+              - data/bioclim/bio12_ann_precip.asc
+              - data/bioclim/bio13_precip_wettest.asc
+              - data/bioclim/bio14_precip_driest.asc
+              - data/bioclim/bio15_precip_seasonality.asc
+              - data/bioclim/bio16_precip_wettest_q.asc
+              - data/bioclim/bio17_precip_driest_q.asc
+              - data/bioclim/bio19_precip_coldest_q.asc
+          landcover_fraction:
+            pattern: data/land-cover/{year}_class{class}.asc
+            years: [2017, 2018, 2019, 2020, 2021, 2022, 2023]
+            classes:
+              #- 1_WHEAT
+              - 2_CORNMAIZ
+              #- 3_BARLEY
+              #- 4_RAPESEED
+              - 5_AGRILAND
+              - 6_GRASSLND
+              - 7_OAKGROVE
+              - 8_CONIFERS
+              - 9_MIXFORST
+              - 10_BEECHGRV
+              #- 11_URBAN
+              - 12_WATER
+          landcover_distance:
+            pattern: data/lc-distances/{year}_class{class}_distance.asc
+            years: [2017, 2018, 2019, 2020, 2021, 2022, 2023]
+            classes:
+              #- 1_WHEAT
+              - 2_CORNMAIZ
+              #- 3_BARLEY
+              #- 4_RAPESEED
+              - 5_AGRILAND
+              - 6_GRASSLND
+              - 7_OAKGROVE
+              - 8_CONIFERS
+              - 9_MIXFORST
+              - 10_BEECHGRV
+              #- 11_URBAN
+              - 12_WATER
+          veg_index:
+            pattern: data/sat-indices/{index}/{year}_{month}_{index_lc}.tif
+            years: [2017, 2018, 2019, 2020, 2021, 2022, 2023]
+            months: [10]
+            indices: [BSI, EVI, EVI2, NBR, NDBI, NDMI, NDSI, NDVI, NDWI, VSSI]
+          era5:
+            pattern: data/era5/*_{year}_{season}_*.asc
+            years: [2017, 2018, 2019, 2020, 2021, 2022, 2023]
+            seasons: [summer, winter]
+          hunting_bag:
+            pattern: data/hunting-bag/hunting_bag_{year}.asc
+            years: [2017, 2018, 2019, 2020, 2021, 2022, 2023]
+          theia_special:
+            files:
+              - data/theia-special/LC01_Dense_Urbanization.asc
+              - data/theia-special/LC14_Fruit_Orchards.asc
+              - data/theia-special/LC15_Vineyards.asc
+              - data/theia-special/LC19_Natural_Heath.asc
+            categorical: false
+          special:
+            files:
+              - data/special/fragmentation_density.asc
+              - data/special/small_woody_features.asc
+              - data/special/Zones_humides_INPN.asc
+          dem:
+            - data/dem/DEM_Altitude.asc
+            - data/dem/DEM_Slope.asc
+            #- data/dem/DEM_Aspect.asc
+      
+      maxent:
+        engine: elapid
+        output_type: cloglog
+        feature_types: [linear, hinge, quadratic, product]
+        product_features: true       # Toggle inclusion of product features
+        n_hinge_features: auto
+        regularization_multiplier: 1.8
+        beta_lqp: 1               # elapid-specific shape parameter
+        max_iterations: 1500
+        threads: -1
+
+      gbm:
+        boosting_type: gbdt
+        objective: binary
+        metric: [auc]
+        learning_rate: 0.03
+        num_leaves: 40
+        max_depth: 6
+        min_data_in_leaf: 48
+        feature_fraction: 0.8
+        bagging_fraction: 0.65
+        bagging_freq: 1
+        lambda_l1: 0.2
+        lambda_l2: 3.0
+        min_gain_to_split: 0.01
+        num_boost_round: 1600
+        early_stopping_rounds: 100
+        validation_fraction: 0.2
+        verbose_eval: 200
+        num_threads: -1
+        calibration:
+          enable: true
+          method: platt
+          dataset: validation
+          regularization: 1000
+
+      prediction:
+        export_geotiff: true
+      
+      evaluation:
+        classification_threshold: auto
+        cross_validation:
+          enable: false
+          method: spatial_block
+          params:
+            k_folds: 5
+            block_size_km: 50
+      
+      variable_importance:
+        permutation:
+          enable: true
+          n_repeats: 2
+      
+      outputs:
+        root: outputs/
+        logs_dir: outputs/logs/
+        model_dir: outputs/models/
+        maps_dir: outputs/maps/
+        figures_dir: outputs/figures/
+        model_paths:
+          elapid: outputs/models/winter_monotemporal_elapid.pkl
+          gbm: outputs/models/winter_monotemporal_gbm.pkl
+
+  - key: summer_multitemporal
+    label: Summer multitemporal
+    script: multitemporal
+    config:
+      # =============================================================================
+      # Project Title: Wild Boar Distribution Model for France
+      # Path: configmultitemporal_summer.yaml
+      # Purpose: Configuration for multitemporal seasonal models (summer example).
+      # Process Step: Governs 3x2 stacking of seasonal rasters and model settings.
+      # Created by Adrian Meyer, Institute Geomatics, FHNW (adrian.meyer@fhnw.ch)
+      # Created: July 2025
+      # Version: v.0.1.0
+      # =============================================================================
+      
+      experiment:
+        name: summer_multitemporal
+        random_seed: 42
+      
+      run_test_year: 2021  # options: all, 2018, 2019, 2020, 2021, 2022, 2023
+      
+      export_java_compatible_input_data: true
+      
+      multitemporal:
+        seasons: ["Summer"]          # Seasons to process
+        years: [2018, 2019, 2020, 2021, 2022, 2023]
+        shift_km: 1000               # Spatial offset between copies
+        stack_pattern: data/stacks/{season}_{year}.zarr
+        include_hunting: false       # Toggle hunting bag predictor
+        ignore_featureconfig_drop: false
+        output_dir: outputs/multitemporal
+        background_per_year: 15000
+        validation_fraction: 0.1
+        vif:
+          enable: true
+          n_satellite: 4
+          n_bioclim: 4
+          n_era5: 4
+          sample_fraction: 0.05
+          feature_config: featureconfig.yaml
+      
+      presence_data:
+        file: data/allpoints.csv
+        crs: EPSG:2154
+        year_column: year
+        season_column: season
+        thinning:
+          enable: true
+          equalize_counts: false
+          percentages:
+            Summer:
+              GBIF:
+                2018: 0.2
+                2019: 1.0
+                2020: 1.0
+                2021: 1.0
+                2022: 0.2
+                2023: 0.4
+              RRN:
+                2018: 0.2
+                2019: 0.4
+                2020: 1.0
+                2021: 0.8
+                2022: 0.6
+                2023: 0.2
+              SNCF:
+                2018: 0.8
+                2019: 1.0
+                2020: 0.4
+                2021: 1.0
+                2022: 0.8
+                2023: 1.0
+      
+      boundary_mask: data/boundary_france.asc
+      
+      bias_grid:
+        enable: true
+        pattern: data/bias-maps/Combined_{year}-{season}.asc
+        output_file: outputs/bias/bias.tif
+      
+      background:
+        use_bias_grid: true
+        bias_strength: 0.6
+      
+      predictors:
+        target_resolution_m: 1000
+        resampling_method:
+          continuous: bilinear
+          categorical: nearest
+        nodata_value: -9999
+        variable_selection:
+          correlation_cutoff: 0.7
+          vif_threshold: 12
+          linkage: average
+          sample_fraction: 0.01
+          reference_year: 2022
+          lc_reference_year_only: true
+          save_selected_list: outputs/selected_predictors.txt
+          feature_config: featureconfig.yaml
+      
+        layers:
+          bioclim:
+            files:
+              - data/bioclim/bio01-ann_mean_temp.asc
+              - data/bioclim/bio02_mean_diurnal_range.asc
+              - data/bioclim/bio03_isothermality.asc
+              - data/bioclim/bio04_temp_seasonality.asc
+              - data/bioclim/bio05_max_temp_warmest_m.asc
+              - data/bioclim/bio07_temp_ann_range.asc
+              - data/bioclim/bio10_mean_temp_warmest_q.asc
+              - data/bioclim/bio12_ann_precip.asc
+              - data/bioclim/bio13_precip_wettest.asc
+              - data/bioclim/bio14_precip_driest.asc
+              - data/bioclim/bio15_precip_seasonality.asc
+              - data/bioclim/bio16_precip_wettest_q.asc
+              - data/bioclim/bio17_precip_driest_q.asc
+              - data/bioclim/bio18_precip_warmest_q.asc
+          landcover_fraction:
+            pattern: data/land-cover/{year}_class{class}.asc
+            years: [2018, 2019, 2020, 2021, 2022, 2023]
+            classes:
+              - 1_WHEAT
+              - 2_CORNMAIZ
+              - 3_BARLEY
+              - 4_RAPESEED
+              - 5_AGRILAND
+              - 6_GRASSLND
+              - 7_OAKGROVE
+              - 8_CONIFERS
+              - 9_MIXFORST
+              - 10_BEECHGRV
+              #- 11_URBAN
+              - 12_WATER
+          landcover_distance:
+            pattern: data/lc-distances/{year}_class{class}_distance.asc
+            years: [2018, 2019, 2020, 2021, 2022, 2023]
+            classes:
+              - 1_WHEAT
+              - 2_CORNMAIZ
+              - 3_BARLEY
+              - 4_RAPESEED
+              - 5_AGRILAND
+              - 6_GRASSLND
+              - 7_OAKGROVE
+              - 8_CONIFERS
+              - 9_MIXFORST
+              - 10_BEECHGRV
+              #- 11_URBAN
+              - 12_WATER
+          veg_index:
+            pattern: data/sat-indices/{index}/{year}_{month}_{index_lc}.tif
+            years: [2018, 2019, 2020, 2021, 2022, 2023]
+            months: [04, 07]
+            indices: [BSI, EVI, EVI2, NBR, NDBI, NDMI, NDSI, NDVI, NDWI, VSSI]
+          era5:
+            pattern: data/era5/*_{year}_{season}_*.asc
+            years: [2018, 2019, 2020, 2021, 2022, 2023]
+            seasons: [summer, winter]
+          hunting_bag:
+            pattern: data/hunting-bag/hunting_bag_{year}.asc
+            years: [2018, 2019, 2020, 2021, 2022, 2023]
+          theia_special:
+            files:
+              - data/theia-special/LC01_Dense_Urbanization.asc
+              - data/theia-special/LC14_Fruit_Orchards.asc
+              - data/theia-special/LC15_Vineyards.asc
+              - data/theia-special/LC19_Natural_Heath.asc
+            categorical: false
+          special:
+            files:
+              - data/special/fragmentation_density.asc
+              - data/special/small_woody_features.asc
+              - data/special/Zones_humides_INPN.asc
+          dem:
+            - data/dem/DEM_Altitude.asc
+            - data/dem/DEM_Slope.asc
+            - data/dem/DEM_Aspect.asc
+      
+      maxent:
+        engine: elapid
+        output_type: cloglog
+        feature_types: [linear, hinge, quadratic]
+        product_features: true
+        n_hinge_features: auto
+        regularization_multiplier: 1.4
+        max_iterations: 1500
+        threads: -1
+
+      gbm:
+        boosting_type: gbdt
+        objective: binary
+        metric: [auc]
+        learning_rate: 0.03
+        num_leaves: 40
+        max_depth: 6
+        min_data_in_leaf: 48
+        feature_fraction: 0.8
+        bagging_fraction: 0.65
+        bagging_freq: 1
+        lambda_l1: 0.2
+        lambda_l2: 3.0
+        min_gain_to_split: 0.01
+        num_boost_round: 1600
+        early_stopping_rounds: 100
+        validation_fraction: 0.2
+        verbose_eval: 200
+        num_threads: -1
+        calibration:
+          enable: true
+          method: platt
+          dataset: validation
+          regularization: 1000
+
+      prediction:
+        export_geotiff: true
+      
+      evaluation:
+        classification_threshold: auto
+        cross_validation:
+          enable: false
+          method: spatial_block
+          params:
+            k_folds: 5
+            block_size_km: 50
+      
+      variable_importance:
+        permutation:
+          enable: true
+          n_repeats: 2
+      
+      outputs:
+        root: outputs/
+        logs_dir: outputs/logs/
+        model_dir: outputs/models/
+        maps_dir: outputs/maps/
+        figures_dir: outputs/figures/
+        model_paths:
+          elapid: outputs/models/summer_multitemporal_elapid.pkl
+          gbm: outputs/models/summer_multitemporal_gbm.pkl
+
+  - key: summer_monotemporal
+    label: Summer monotemporal
+    script: monotemporal
+    config:
+      # =============================================================================
+      # Project Title: Wild Boar Distribution Model for France
+      # Path: configsummer_monotemporal.yaml
+      # Purpose: Configuration for monotemporal seasonal models (summer example).
+      # Process Step: Governs 1x1 averaged stacking of seasonal rasters and model settings.
+      # Created by Adrian Meyer, Institute Geomatics, FHNW (adrian.meyer@fhnw.ch)
+      # Created: July 2025
+      # Version: v.0.1.0
+      # =============================================================================
+      
+      experiment:
+        name: summer_monotemporal
+        random_seed: 42
+      
+      monotemporal: true
+      
+      run_test_year: 2021  # options: all, 2018, 2019, 2020, 2021, 2022, 2023
+      
+      export_java_compatible_input_data: true
+      
+      multitemporal:
+        seasons: ["Summer"]          # Seasons to process
+        years: [2018, 2019, 2020, 2021, 2022, 2023]
+        shift_km: 1000               # Spatial offset between copies
+        stack_pattern: data/stacks/{season}_{year}.zarr
+        include_hunting: false       # Toggle hunting bag predictor
+        ignore_featureconfig_drop: false
+        output_dir: outputs/multitemporal
+        background_per_year: 15000
+        validation_fraction: 0.1
+        vif:
+          enable: true
+          n_satellite: 4
+          n_bioclim: 4
+          n_era5: 4
+          sample_fraction: 0.2
+          feature_config: featureconfig.yaml
+      
+      presence_data:
+        file: data/allpoints.csv
+        crs: EPSG:2154
+        year_column: year
+        season_column: season
+        thinning:
+          enable: true
+          equalize_counts: false
+          percentages:
+            Summer:
+              GBIF:
+                2018: 0.2
+                2019: 1.0
+                2020: 1.0
+                2021: 1.0
+                2022: 0.2
+                2023: 0.4
+              RRN:
+                2018: 0.2
+                2019: 0.4
+                2020: 1.0
+                2021: 0.8
+                2022: 0.6
+                2023: 0.2
+              SNCF:
+                2018: 0.8
+                2019: 1.0
+                2020: 0.4
+                2021: 1.0
+                2022: 0.8
+                2023: 1.0
+      
+      boundary_mask: data/boundary_france.asc
+      
+      bias_grid:
+        enable: true
+        pattern: data/bias-maps/Combined_{year}-{season}.asc
+        output_file: outputs/bias/bias.tif
+      
+      background:
+        use_bias_grid: true
+        bias_strength: 0.6
+      
+      predictors:
+        target_resolution_m: 1000
+        resampling_method:
+          continuous: bilinear
+          categorical: nearest
+        nodata_value: -9999
+        variable_selection:
+          correlation_cutoff: 0.7
+          vif_threshold: 12
+          linkage: average
+          sample_fraction: 0.01
+          reference_year: 2022
+          lc_reference_year_only: true
+          save_selected_list: outputs/selected_predictors.txt
+          feature_config: featureconfig.yaml
+      
+        layers:
+          bioclim:
+            files:
+              - data/bioclim/bio01-ann_mean_temp.asc
+              - data/bioclim/bio02_mean_diurnal_range.asc
+              - data/bioclim/bio03_isothermality.asc
+              - data/bioclim/bio04_temp_seasonality.asc
+              - data/bioclim/bio05_max_temp_warmest_m.asc
+              - data/bioclim/bio07_temp_ann_range.asc
+              - data/bioclim/bio10_mean_temp_warmest_q.asc
+              - data/bioclim/bio12_ann_precip.asc
+              - data/bioclim/bio13_precip_wettest.asc
+              - data/bioclim/bio14_precip_driest.asc
+              - data/bioclim/bio15_precip_seasonality.asc
+              - data/bioclim/bio16_precip_wettest_q.asc
+              - data/bioclim/bio17_precip_driest_q.asc
+              - data/bioclim/bio18_precip_warmest_q.asc
+          landcover_fraction:
+            pattern: data/land-cover/{year}_class{class}.asc
+            years: [2018, 2019, 2020, 2021, 2022, 2023]
+            classes:
+              - 1_WHEAT
+              - 2_CORNMAIZ
+              - 3_BARLEY
+              - 4_RAPESEED
+              - 5_AGRILAND
+              - 6_GRASSLND
+              - 7_OAKGROVE
+              - 8_CONIFERS
+              - 9_MIXFORST
+              - 10_BEECHGRV
+              #- 11_URBAN
+              - 12_WATER
+          landcover_distance:
+            pattern: data/lc-distances/{year}_class{class}_distance.asc
+            years: [2018, 2019, 2020, 2021, 2022, 2023]
+            classes:
+              - 1_WHEAT
+              - 2_CORNMAIZ
+              - 3_BARLEY
+              - 4_RAPESEED
+              - 5_AGRILAND
+              - 6_GRASSLND
+              - 7_OAKGROVE
+              - 8_CONIFERS
+              - 9_MIXFORST
+              - 10_BEECHGRV
+              #- 11_URBAN
+              - 12_WATER
+          veg_index:
+            pattern: data/sat-indices/{index}/{year}_{month}_{index_lc}.tif
+            years: [2018, 2019, 2020, 2021, 2022, 2023]
+            months: [04, 07]
+            indices: [BSI, EVI, EVI2, NBR, NDBI, NDMI, NDSI, NDVI, NDWI, VSSI]
+          era5:
+            pattern: data/era5/*_{year}_{season}_*.asc
+            years: [2018, 2019, 2020, 2021, 2022, 2023]
+            seasons: [summer, winter]
+          hunting_bag:
+            pattern: data/hunting-bag/hunting_bag_{year}.asc
+            years: [2018, 2019, 2020, 2021, 2022, 2023]
+          theia_special:
+            files:
+              - data/theia-special/LC01_Dense_Urbanization.asc
+              - data/theia-special/LC14_Fruit_Orchards.asc
+              - data/theia-special/LC15_Vineyards.asc
+              - data/theia-special/LC19_Natural_Heath.asc
+            categorical: false
+          special:
+            files:
+              - data/special/fragmentation_density.asc
+              - data/special/small_woody_features.asc
+              - data/special/Zones_humides_INPN.asc
+          dem:
+            - data/dem/DEM_Altitude.asc
+            - data/dem/DEM_Slope.asc
+            - data/dem/DEM_Aspect.asc
+      
+      maxent:
+        engine: elapid
+        output_type: cloglog
+        feature_types: [linear, hinge, quadratic]
+        product_features: true       # Toggle inclusion of product features
+        n_hinge_features: auto
+        regularization_multiplier: 1.4
+        beta_lqp: 1               # elapid-specific shape parameter
+        max_iterations: 1500
+        threads: -1
+
+      gbm:
+        boosting_type: gbdt
+        objective: binary
+        metric: [auc]
+        learning_rate: 0.03
+        num_leaves: 40
+        max_depth: 6
+        min_data_in_leaf: 48
+        feature_fraction: 0.8
+        bagging_fraction: 0.65
+        bagging_freq: 1
+        lambda_l1: 0.2
+        lambda_l2: 3.0
+        min_gain_to_split: 0.01
+        num_boost_round: 1600
+        early_stopping_rounds: 100
+        validation_fraction: 0.2
+        verbose_eval: 200
+        num_threads: -1
+        calibration:
+          enable: true
+          method: platt
+          dataset: validation
+          regularization: 1000
+
+      prediction:
+        export_geotiff: true
+      
+      evaluation:
+        classification_threshold: auto
+        cross_validation:
+          enable: false
+          method: spatial_block
+          params:
+            k_folds: 5
+            block_size_km: 50
+      
+      variable_importance:
+        permutation:
+          enable: true
+          n_repeats: 2
+      
+      outputs:
+        root: outputs/
+        logs_dir: outputs/logs/
+        model_dir: outputs/models/
+        maps_dir: outputs/maps/
+        figures_dir: outputs/figures/
+        model_paths:
+          elapid: outputs/models/summer_monotemporal_elapid.pkl
+          gbm: outputs/models/summer_monotemporal_gbm.pkl

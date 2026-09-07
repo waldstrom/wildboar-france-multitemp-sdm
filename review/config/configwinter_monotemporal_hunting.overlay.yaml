@@ -1,0 +1,5 @@
+# Minimal reviewer-requested correction.
+# The orchestrator applies this overlay to immutable run copies and does not edit
+# the repository source YAMLs in place.
+multitemporal:
+  include_hunting: true

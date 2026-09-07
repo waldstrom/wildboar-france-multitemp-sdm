@@ -1,0 +1,45 @@
+name: Build data-free ZIP
+
+on:
+  pull_request:
+    branches: [review-iteration]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out publication tree
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate data-free repository
+        run: python scripts/validate_repository.py
+
+      - name: Build history-free export
+        run: |
+          mkdir -p artifact
+          git archive --format=tar --prefix=maxent-code-only/ HEAD | tar -xf - -C artifact
+          find artifact -type d -name .git -prune -exec rm -rf {} +
+          cd artifact/maxent-code-only
+          python scripts/validate_repository.py
+          cd ..
+          zip -qr ../maxent-code-only.zip maxent-code-only
+
+      - name: Upload ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: maxent-code-only-zip
+          path: maxent-code-only.zip
+          if-no-files-found: error
+          retention-days: 7

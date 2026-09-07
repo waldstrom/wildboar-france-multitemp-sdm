@@ -1,0 +1,29 @@
+name: Repository hygiene
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  code-only-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Reject tracked data and generated artefacts
+        run: python scripts/validate_repository.py
+
+      - name: Compile Python sources
+        run: python -m compileall -q scripts review review-corrections.py review-finalize-existing-run.py

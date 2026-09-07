@@ -1,0 +1,163 @@
+schema_version: 1
+
+review:
+  title: "Reviewer correction — winter monotemporal hunting predictor"
+  issue: >
+    Winter monotemporal models were configured with multitemporal.include_hunting=false,
+    while the matched winter multitemporal models used the hunting-bag predictor.
+  output_root: "review/output"
+  timezone: "Europe/Athens"
+  seed: 42
+  engines:
+    - elapid
+    - gbm
+
+  validation:
+    expected_splits:
+      - train
+      - validation
+      - test
+    fail_on_missing_hunting_source: true
+    fail_on_missing_hunting_stack: true
+    require_all_configured_years: true
+    require_all_engines: true
+
+  publication:
+    map_year: 2019
+    map_engine: elapid
+    figure_dpi: 300
+    export_geotiffs: true
+
+  feature_importance:
+    n_repeats: 10
+
+  archive:
+    # Large GeoTIFFs remain in the timestamped run tree but are not duplicated
+    # into the compact publication ZIP when they exceed this threshold.
+    max_member_mb: 100
+
+  config_discovery:
+    globs:
+      - "config*.yaml"
+      - "configs/**/*.yaml"
+
+  configuration_audit:
+    # These are known/declared implementation differences between temporal modes.
+    # Every other resolved mono/multi difference is retained in the audit as
+    # "review_required"; nothing is silently harmonised beyond the hunting fix.
+    allowed_difference_prefixes:
+      - experiment
+      - run_test_year
+      - monotemporal
+      - multitemporal.stack_base_dir
+      - multitemporal.monotemporal
+      - multitemporal.shift_km
+      - multitemporal.cache_mode
+      - variable_importance
+      - model.engines
+      - predictors.layers.dem
+
+scenarios:
+  - id: winter_monotemporal_allpoints
+    order: 1
+    role: corrected
+    dataset: allpoints
+    temporal: monotemporal
+    runner: monotemporal
+    season: Winter
+    expect_hunting: true
+    source:
+      aggregate_config: config_gbm_loyo_compare.yaml
+      selector:
+        runner: monotemporal
+        season: Winter
+    patch:
+      multitemporal:
+        include_hunting: true
+
+  - id: winter_multitemporal_allpoints
+    order: 2
+    role: reference
+    dataset: allpoints
+    temporal: multitemporal
+    runner: multitemporal
+    season: Winter
+    expect_hunting: true
+    source:
+      aggregate_config: config_gbm_loyo_compare.yaml
+      selector:
+        runner: multitemporal
+        season: Winter
+    patch:
+      multitemporal:
+        include_hunting: true
+
+  - id: winter_monotemporal_gbif
+    order: 3
+    role: corrected
+    dataset: gbif
+    temporal: monotemporal
+    runner: monotemporal
+    season: Winter
+    expect_hunting: true
+    source:
+      aggregate_config: config_gbm_loyo_gbif.yaml
+      selector:
+        runner: monotemporal
+        season: Winter
+    patch:
+      multitemporal:
+        include_hunting: true
+
+  - id: winter_multitemporal_gbif
+    order: 4
+    role: reference
+    dataset: gbif
+    temporal: multitemporal
+    runner: multitemporal
+    season: Winter
+    expect_hunting: true
+    source:
+      aggregate_config: config_gbm_loyo_gbif.yaml
+      selector:
+        runner: multitemporal
+        season: Winter
+    patch:
+      multitemporal:
+        include_hunting: true
+
+  # Optional controlled reproductions of the original confounded setting.
+  # They are never run unless --include-controls is supplied.
+  - id: winter_monotemporal_allpoints_no_hunting_control
+    order: 91
+    role: control
+    dataset: allpoints
+    temporal: monotemporal
+    runner: monotemporal
+    season: Winter
+    expect_hunting: false
+    source:
+      aggregate_config: config_gbm_loyo_compare.yaml
+      selector:
+        runner: monotemporal
+        season: Winter
+    patch:
+      multitemporal:
+        include_hunting: false
+
+  - id: winter_monotemporal_gbif_no_hunting_control
+    order: 92
+    role: control
+    dataset: gbif
+    temporal: monotemporal
+    runner: monotemporal
+    season: Winter
+    expect_hunting: false
+    source:
+      aggregate_config: config_gbm_loyo_gbif.yaml
+      selector:
+        runner: monotemporal
+        season: Winter
+    patch:
+      multitemporal:
+        include_hunting: false

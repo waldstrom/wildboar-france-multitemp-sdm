@@ -1,0 +1,16 @@
+elapid
+geopandas
+matplotlib
+numpy
+optuna
+pandas
+pyyaml
+rasterio
+scikit-learn
+lightgbm>=4.0.0
+scipy
+statsmodels
+xarray
+tqdm
+zarr
+psutil

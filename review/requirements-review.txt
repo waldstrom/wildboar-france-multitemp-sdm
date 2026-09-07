@@ -1,0 +1,3 @@
+# Core analysis dependencies are already declared in the repository requirements.
+# This optional package is used only to index the supplied supplement PDF captions.
+pypdf>=4

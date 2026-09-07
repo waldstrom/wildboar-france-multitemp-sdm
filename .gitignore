@@ -1,0 +1,108 @@
+# Python bytecode and test/tool caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Virtual environments and local environment files
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+
+# IDE and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Build and distribution products
+build/
+dist/
+*.egg-info/
+
+# Pipeline-generated directories
+exps/
+expy/
+processed_data/
+processed_data_*/
+correlation/
+correlation_*/
+cache/
+.cache/
+
+# Runtime files
+*.log
+*.aux.xml
+*.tmp
+*.temp
+
+# Data directory: documentation is the only versioned content
+data/**
+!data/**/
+!data/**/README.md
+
+# Generated model outputs
+outputs/**
+!outputs/README.md
+
+# Review-package inputs and outputs
+review/input/**
+!review/input/README.md
+review/output/**
+!review/output/README.md
+
+# Common geospatial, scientific and tabular data formats
+*.asc
+*.bil
+*.hdr
+*.prj
+*.tif
+*.tiff
+*.vrt
+*.gpkg
+*.geojson
+*.shp
+*.shx
+*.dbf
+*.gdb/
+*.nc
+*.grb
+*.grib
+*.h5
+*.hdf5
+*.zarr/
+*.npy
+*.npz
+*.parquet
+*.feather
+*.csv
+*.tsv
+*.xls
+*.xlsx
+
+# Models, databases, notebooks, figures and archives
+*.joblib
+*.pickle
+*.pkl
+*.db
+*.sqlite
+*.sqlite3
+*.ipynb
+.ipynb_checkpoints/
+*.png
+*.jpg
+*.jpeg
+*.pdf
+*.docx
+*.zip
+*.7z
+*.tar
+*.tar.gz
+*.tgz
