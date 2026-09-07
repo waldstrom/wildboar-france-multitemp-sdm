@@ -23,7 +23,7 @@ multitemporal:
   years: [2017, 2018, 2019, 2020, 2021, 2022, 2023]
   shift_km: 1000               # Spatial offset between copies
   stack_pattern: data/stacks/{season}_{year}.zarr
-  include_hunting: false       # Toggle hunting bag predictor
+  include_hunting: true       # Toggle hunting bag predictor
   ignore_featureconfig_drop: false
   output_dir: outputs/multitemporal
   background_per_year: 15000
