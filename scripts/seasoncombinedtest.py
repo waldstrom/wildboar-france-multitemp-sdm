@@ -190,7 +190,7 @@ def run_model(
     # 1. Build full stack and average yearly layers
     stack_path = build_stack(cfg)
 
-    fc_file = Path(cfg["predictors"]["variable_selection"].get("feature_config", "featureconfig.yaml"))
+    fc_file = Path(cfg["predictors"]["variable_selection"].get("feature_config", "configs/features/featureconfig.yaml"))
     _average_stack(stack_path, _determine_years(cfg), fc_file)
 
     # 2. Disable preprocessing for the actual run
@@ -215,9 +215,9 @@ def main() -> None:
     args = ap.parse_args()
 
     seasons = {
-        "summer": Path("configsummer.yaml"),
-        "winter": Path("configwinter.yaml"),
-        "all": Path("configall.yaml"),
+        "summer": Path("configs/legacy/configsummer.yaml"),
+        "winter": Path("configs/legacy/configwinter.yaml"),
+        "all": Path("configs/legacy/configall.yaml"),
     }
     datasets = ["GBIF", "RRN", "SNCF", "Combined"]
     variants = [

@@ -5,3 +5,4 @@ This directory is intentionally empty in version control. Pipeline runs may crea
 Do not commit generated outputs. Store release artefacts in an external repository or archive that is appropriate for their size, licence and sensitivity, and record the producing commit, configuration, software environment and checksums.
 
 The supplied `.gitignore` keeps everything below `outputs/` untracked except this file.
+See [the output reference](../docs/OUTPUTS.md) for fold metrics, maps, importance and novelty files, and [the manuscript crosswalk](../docs/MANUSCRIPT_CROSSWALK.md) for publication destinations.

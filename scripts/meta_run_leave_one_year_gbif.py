@@ -1,11 +1,12 @@
 """GBIF-only variant of the leave-one-year-out meta runner.
 
 The runner accepts aggregated configuration files that define the seasonal
-scenarios to execute.  Two companion YAMLs are now available:
+scenarios to execute. The default is ``configs/reviewed/loyo_gbif.yaml``.
+Historical comparison presets remain available:
 
-* :mod:`config_gbm_loyo_gbif.yaml` &ndash; uses the tuned Mahalanobis thinning
+* :mod:`configs/experiments/config_gbm_loyo_gbif.yaml` &ndash; uses the tuned Mahalanobis thinning
   percentages per season.
-* :mod:`config_gbm_loyo_gbif_grid.yaml` &ndash; disables the Mahalanobis stage and
+* :mod:`configs/experiments/config_gbm_loyo_gbif_grid.yaml` &ndash; disables the Mahalanobis stage and
   instead keeps a single GBIF record per 20 km fishnet cell.
 
 Select the desired behaviour by pointing ``--config`` at the corresponding
@@ -69,11 +70,11 @@ def main() -> None:
     )
     parser.add_argument(
         "--config",
-        default="config_gbm_loyo_gbif.yaml",
+        default="configs/reviewed/loyo_gbif.yaml",
         help=(
             "Aggregate YAML containing GBIF-only scenario definitions "
-            "(e.g. config_gbm_loyo_gbif.yaml for Mahalanobis thinning or "
-            "config_gbm_loyo_gbif_grid.yaml for 20 km grid thinning)"
+            "(e.g. configs/experiments/config_gbm_loyo_gbif.yaml for Mahalanobis thinning or "
+            "configs/experiments/config_gbm_loyo_gbif_grid.yaml for 20 km grid thinning)"
         ),
     )
     parser.add_argument(

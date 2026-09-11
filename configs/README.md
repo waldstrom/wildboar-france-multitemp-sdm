@@ -1,21 +1,19 @@
-# Generated scenario configurations
+# Configuration index
 
-This directory contains the explicit year × season × observation-source configurations used by the legacy scenario runner. They are text-only reproducibility records, not input data.
+[Repository home](../README.md) · [Configuration reference](../docs/CONFIGURATION.md) · [Path migration](../docs/CONFIG_MIGRATION.md)
 
-Naming convention:
+Start with `reviewed/` for the corrected study examples. Other folders retain useful historical experiments and their original scientific settings.
 
-```text
-<year>-<season>_<source>.yaml
-```
+| Directory | Role | Manuscript links |
+|---|---|---|
+| [reviewed](reviewed/README.md) | Two corrected LOYO starting configurations | S5; Table 3; S6a; S8 |
+| [experiments](experiments/README.md) | Historical seasonal/engine comparison presets | S4-S5; pre-correction provenance |
+| [tuning](tuning/README.md) | Separate search experiments, with explicit objective caveats | S5 |
+| [legacy](legacy/README.md) | Original pipeline and 44 year/source snapshots | S1-S4; historical comparisons |
+| [features](features/README.md) | Candidate rules and groups | S4 |
+| [postprocessing](postprocessing/README.md) | Saved-importance analysis input template | S6b support |
+| [review/config](../review/config) | Correction orchestration, overlay and export manifest | Review-stage audit |
 
-where `<source>` is `ALL`, `GBIF`, `RRN` or `SNCF`.
+[catalog.yaml](catalog.yaml) is the complete machine-readable inventory, including each runner, previous path and study references. Run `python scripts/validate_documentation.py` from the root after changes. The catalog itself is not passed to a modelling runner.
 
-The files preserve the exact paths and parameter values expected by the pipeline. They deliberately refer to local files below `data/`; those files are not distributed. See [`../data/README.md`](../data/README.md) before running a scenario.
-
-Do not edit dozens of generated files independently. Change the appropriate root configuration or generation logic, regenerate the matrix, and review the resulting diff. A scenario can be run with:
-
-```bash
-python scripts/run_pipeline.py --config configs/2022-Winter_ALL.yaml
-```
-
-The repository hygiene check permits YAML files here but rejects tracked data and generated outputs.
+Model paths resolve from the repository root even though configs are in subdirectories. The postprocessing YAML is the documented exception: its paths resolve from its own directory.

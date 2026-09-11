@@ -1,0 +1,630 @@
+# Documentation inventory, not a modelling configuration.
+schema_version: 1
+entries:
+- path: configs/experiments/config_gbm-compare.yaml
+  kind: aggregate
+  status: historical experiment
+  runner: scripts/meta_run.py
+  study_references:
+  - S4
+  - S5
+  - S6a
+  - S8
+  previous_path: config_gbm-compare.yaml
+- path: configs/experiments/config_gbm_loyo_compare.yaml
+  kind: aggregate
+  status: historical experiment
+  runner: scripts/meta_run_leave_one_year.py
+  study_references:
+  - S4
+  - S5
+  - S6a
+  - S8
+  previous_path: config_gbm_loyo_compare.yaml
+- path: configs/experiments/config_gbm_loyo_gbif.yaml
+  kind: aggregate
+  status: historical experiment
+  runner: scripts/meta_run_leave_one_year_gbif.py
+  study_references:
+  - S4
+  - S5
+  - S6a
+  - S8
+  previous_path: config_gbm_loyo_gbif.yaml
+- path: configs/experiments/config_gbm_loyo_gbif_grid.yaml
+  kind: aggregate
+  status: historical experiment
+  runner: scripts/meta_run_leave_one_year_gbif.py
+  study_references:
+  - S4
+  - S5
+  - S6a
+  - S8
+  previous_path: config_gbm_loyo_gbif_grid.yaml
+- path: configs/experiments/configmultitemporal_summer.yaml
+  kind: seasonal
+  status: historical experiment
+  runner: scripts/multitemporal.py
+  study_references:
+  - S4
+  - S5
+  - S6a
+  - S8
+  previous_path: configmultitemporal_summer.yaml
+- path: configs/experiments/configmultitemporal_winter.yaml
+  kind: seasonal
+  status: historical experiment
+  runner: scripts/multitemporal.py
+  study_references:
+  - S4
+  - S5
+  - S6a
+  - S8
+  previous_path: configmultitemporal_winter.yaml
+- path: configs/experiments/configsummer_monotemporal.yaml
+  kind: seasonal
+  status: historical experiment
+  runner: scripts/monotemporal.py
+  study_references:
+  - S4
+  - S5
+  - S6a
+  - S8
+  previous_path: configsummer_monotemporal.yaml
+- path: configs/experiments/configwinter_monotemporal.yaml
+  kind: seasonal
+  status: historical experiment
+  runner: scripts/monotemporal.py
+  study_references:
+  - S4
+  - S5
+  - S6a
+  - S8
+  previous_path: configwinter_monotemporal.yaml
+- path: configs/features/featureconfig.yaml
+  kind: features
+  status: shared feature rules
+  runner: scripts/variable_selection.py
+  study_references:
+  - S4
+  previous_path: featureconfig.yaml
+- path: configs/legacy/config.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: config.yaml
+- path: configs/legacy/configall.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configall.yaml
+- path: configs/legacy/configsummer.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configsummer.yaml
+- path: configs/legacy/configwinter.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configwinter.yaml
+- path: configs/legacy/scenarios/2017-Winter_ALL.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2017-Winter_ALL.yaml
+- path: configs/legacy/scenarios/2017-Winter_GBIF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2017-Winter_GBIF.yaml
+- path: configs/legacy/scenarios/2017-Winter_RRN.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2017-Winter_RRN.yaml
+- path: configs/legacy/scenarios/2017-Winter_SNCF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2017-Winter_SNCF.yaml
+- path: configs/legacy/scenarios/2018-Summer_ALL.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2018-Summer_ALL.yaml
+- path: configs/legacy/scenarios/2018-Summer_GBIF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2018-Summer_GBIF.yaml
+- path: configs/legacy/scenarios/2018-Summer_RRN.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2018-Summer_RRN.yaml
+- path: configs/legacy/scenarios/2018-Summer_SNCF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2018-Summer_SNCF.yaml
+- path: configs/legacy/scenarios/2018-Winter_ALL.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2018-Winter_ALL.yaml
+- path: configs/legacy/scenarios/2018-Winter_GBIF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2018-Winter_GBIF.yaml
+- path: configs/legacy/scenarios/2018-Winter_RRN.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2018-Winter_RRN.yaml
+- path: configs/legacy/scenarios/2018-Winter_SNCF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2018-Winter_SNCF.yaml
+- path: configs/legacy/scenarios/2019-Summer_ALL.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2019-Summer_ALL.yaml
+- path: configs/legacy/scenarios/2019-Summer_GBIF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2019-Summer_GBIF.yaml
+- path: configs/legacy/scenarios/2019-Summer_RRN.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2019-Summer_RRN.yaml
+- path: configs/legacy/scenarios/2019-Summer_SNCF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2019-Summer_SNCF.yaml
+- path: configs/legacy/scenarios/2019-Winter_ALL.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2019-Winter_ALL.yaml
+- path: configs/legacy/scenarios/2019-Winter_GBIF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2019-Winter_GBIF.yaml
+- path: configs/legacy/scenarios/2019-Winter_RRN.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2019-Winter_RRN.yaml
+- path: configs/legacy/scenarios/2019-Winter_SNCF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2019-Winter_SNCF.yaml
+- path: configs/legacy/scenarios/2020-Summer_ALL.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2020-Summer_ALL.yaml
+- path: configs/legacy/scenarios/2020-Summer_GBIF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2020-Summer_GBIF.yaml
+- path: configs/legacy/scenarios/2020-Summer_RRN.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2020-Summer_RRN.yaml
+- path: configs/legacy/scenarios/2020-Summer_SNCF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2020-Summer_SNCF.yaml
+- path: configs/legacy/scenarios/2020-Winter_ALL.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2020-Winter_ALL.yaml
+- path: configs/legacy/scenarios/2020-Winter_GBIF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2020-Winter_GBIF.yaml
+- path: configs/legacy/scenarios/2020-Winter_RRN.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2020-Winter_RRN.yaml
+- path: configs/legacy/scenarios/2020-Winter_SNCF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2020-Winter_SNCF.yaml
+- path: configs/legacy/scenarios/2021-Summer_ALL.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2021-Summer_ALL.yaml
+- path: configs/legacy/scenarios/2021-Summer_GBIF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2021-Summer_GBIF.yaml
+- path: configs/legacy/scenarios/2021-Summer_RRN.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2021-Summer_RRN.yaml
+- path: configs/legacy/scenarios/2021-Summer_SNCF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2021-Summer_SNCF.yaml
+- path: configs/legacy/scenarios/2021-Winter_ALL.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2021-Winter_ALL.yaml
+- path: configs/legacy/scenarios/2021-Winter_GBIF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2021-Winter_GBIF.yaml
+- path: configs/legacy/scenarios/2021-Winter_RRN.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2021-Winter_RRN.yaml
+- path: configs/legacy/scenarios/2021-Winter_SNCF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2021-Winter_SNCF.yaml
+- path: configs/legacy/scenarios/2022-Summer_ALL.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2022-Summer_ALL.yaml
+- path: configs/legacy/scenarios/2022-Summer_GBIF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2022-Summer_GBIF.yaml
+- path: configs/legacy/scenarios/2022-Summer_RRN.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2022-Summer_RRN.yaml
+- path: configs/legacy/scenarios/2022-Summer_SNCF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2022-Summer_SNCF.yaml
+- path: configs/legacy/scenarios/2022-Winter_ALL.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2022-Winter_ALL.yaml
+- path: configs/legacy/scenarios/2022-Winter_GBIF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2022-Winter_GBIF.yaml
+- path: configs/legacy/scenarios/2022-Winter_RRN.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2022-Winter_RRN.yaml
+- path: configs/legacy/scenarios/2022-Winter_SNCF.yaml
+  kind: pipeline
+  status: historical snapshot
+  runner: scripts/run_pipeline.py
+  study_references:
+  - S1
+  - S2
+  - S4
+  previous_path: configs/2022-Winter_SNCF.yaml
+- path: configs/postprocessing/analyze_feature_importance.yaml
+  kind: analysis
+  status: local input template
+  runner: scripts/analyze_feature_importance.py
+  study_references:
+  - S6b
+  previous_path: scripts/analyze_feature_importance_config.yaml
+- path: configs/reviewed/loyo_all_sources.yaml
+  kind: aggregate
+  status: reviewed starting point
+  runner: scripts/meta_run_leave_one_year.py
+  study_references:
+  - S4
+  - S5
+  - S6a
+  - S8
+  derived_from: configs/experiments/config_gbm_loyo_compare.yaml
+- path: configs/reviewed/loyo_gbif.yaml
+  kind: aggregate
+  status: reviewed starting point
+  runner: scripts/meta_run_leave_one_year_gbif.py
+  study_references:
+  - S4
+  - S5
+  - S6a
+  - S8
+  derived_from: configs/experiments/config_gbm_loyo_gbif.yaml
+- path: configs/tuning/configmaha_thin_optuna_summer.yaml
+  kind: search
+  status: exploratory search
+  runner: scripts/maha-thin-multi.py
+  study_references:
+  - S1
+  - S5
+  previous_path: configmaha_thin_optuna_summer.yaml
+- path: configs/tuning/configmaha_thin_optuna_winter.yaml
+  kind: search
+  status: exploratory search
+  runner: scripts/maha-thin-multi.py
+  study_references:
+  - S1
+  - S5
+  previous_path: configmaha_thin_optuna_winter.yaml
+- path: configs/tuning/configmultitemporal_optuna.yaml
+  kind: search
+  status: exploratory search
+  runner: scripts/multitemporal_optuna.py
+  study_references:
+  - S1
+  - S5
+  previous_path: configmultitemporal_optuna.yaml
+- path: configs/tuning/configmultitemporal_optuna_regularization_summer.yaml
+  kind: search
+  status: exploratory search
+  runner: scripts/multitemporal_optuna_regularization.py
+  study_references:
+  - S1
+  - S5
+  previous_path: configmultitemporal_optuna_regularization_summer.yaml
+- path: configs/tuning/configmultitemporal_optuna_regularization_winter.yaml
+  kind: search
+  status: exploratory search
+  runner: scripts/multitemporal_optuna_regularization.py
+  study_references:
+  - S1
+  - S5
+  previous_path: configmultitemporal_optuna_regularization_winter.yaml
+- path: configs/tuning/configtuning.yaml
+  kind: search
+  status: exploratory search
+  runner: scripts/optuna_tuning.py
+  study_references:
+  - S1
+  - S5
+  previous_path: configtuning.yaml
+- path: review/config/artifact-manifest.yaml
+  kind: review
+  status: review utility
+  runner: review-corrections.py
+  study_references:
+  - S5
+  - S6a
+  - S6b
+  - S7
+  - S8
+  - S9
+- path: review/config/configwinter_monotemporal_hunting.overlay.yaml
+  kind: review
+  status: review utility
+  runner: review-corrections.py
+  study_references:
+  - S5
+  - S6a
+  - S6b
+  - S7
+  - S8
+  - S9
+- path: review/config/review-corrections.yaml
+  kind: review
+  status: review utility
+  runner: review-corrections.py
+  study_references:
+  - S5
+  - S6a
+  - S6b
+  - S7
+  - S8
+  - S9

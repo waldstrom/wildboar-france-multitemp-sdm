@@ -161,7 +161,7 @@ def run_selection(cfg: dict, stack_path: Path) -> list[str]:
         df = df.drop(columns=[c for cols_cl in class_groups.values() for c in cols_cl])
 
     # Apply drop rules from feature configuration if available
-    fc_path = cfg["predictors"]["variable_selection"].get("feature_config", "featureconfig.yaml")
+    fc_path = cfg["predictors"]["variable_selection"].get("feature_config", "configs/features/featureconfig.yaml")
     if Path(fc_path).exists():
         try:
             feature_cfg = yaml.safe_load(Path(fc_path).read_text())

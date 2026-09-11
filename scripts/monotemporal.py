@@ -558,7 +558,7 @@ def _apply_feature_config(ds: xr.Dataset, cfg: dict) -> xr.Dataset:
         return _set_load_info(ds, ds.attrs.get("_load_info", {}))
 
     fc_path = (
-        mt_cfg.get("vif", {}).get("feature_config", "featureconfig.yaml")
+        mt_cfg.get("vif", {}).get("feature_config", "configs/features/featureconfig.yaml")
     )
     info = _prepare_info_map(ds.attrs.get("_load_info", {}))
     if Path(fc_path).exists():

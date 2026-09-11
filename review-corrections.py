@@ -77,12 +77,12 @@ def find_repo_root(start: Path) -> Path:
     markers = [
         start / "scripts" / "monotemporal.py",
         start / "scripts" / "multitemporal.py",
-        start / "configwinter_monotemporal.yaml",
+        start / "configs/experiments/configwinter_monotemporal.yaml",
     ]
     missing = [str(path) for path in markers if not path.exists()]
     if missing:
         raise FileNotFoundError(
-            "review-corrections.py must be located at the maxent-repo root. "
+            "review-corrections.py must be located at the repository root. "
             f"Missing required repository files: {missing}"
         )
     return start

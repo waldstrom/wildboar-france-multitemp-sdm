@@ -1,122 +1,91 @@
-# Wild Boar Habitat Suitability Modelling for France
+# Wild boar habitat suitability across France
 
-This repository contains the Python workflow used to prepare, fit and evaluate seasonal wild-boar habitat-suitability models for mainland France. It includes MaxEnt modelling through `elapid`, optional GBM comparisons, predictor selection, occurrence thinning, bias-aware background sampling, leave-one-year-out experiments, evaluation, novelty analysis and feature-importance utilities.
+[![Repository checks](https://github.com/waldstrom/wildboar-france-multitemp-sdm/actions/workflows/repository-hygiene.yml/badge.svg)](https://github.com/waldstrom/wildboar-france-multitemp-sdm/actions/workflows/repository-hygiene.yml)
+[![License: BSD 3-Clause](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](LICENSE)
+[![Study preprint](https://img.shields.io/badge/Preprint-Research_Square-008080.svg)](https://doi.org/10.21203/rs.3.rs-8798859/v1)
 
-> **Code-only release:** research data and generated results are deliberately not distributed here. Every expected data location contains a `README.md` describing the required format, source or access route, and preparation steps.
+Python research workflows for **seasonal, presence-background habitat suitability modelling** of *Sus scrofa* in mainland France. The study combines GBIF observations, road and rail wildlife-vehicle collisions, and annually updated environmental predictors to compare **multitemporal and monotemporal MaxEnt and LightGBM models** using leave-one-year-out evaluation.
 
-## What is included
+Companion code to **Wild Boar Collision Data and Satellite Computer Vision Refine Habitat Suitability Mapping across France**, Adrian Ferdinand Meyer, Théo Reibel, Kevin Morelle, Mathias Kneubühler and Denis Jordan (2026).
 
-- modelling, preprocessing, evaluation and visualisation code;
-- YAML configurations for baseline, seasonal, monotemporal, multitemporal, Optuna and GBM-comparison experiments;
-- explicit year × season × data-stream scenario configurations;
-- tests and a repository-hygiene validator;
-- manuscript-review utilities under `review/`;
-- data-acquisition and provenance documentation.
+> This is a code-only research repository. Input data, fitted models and publication outputs are obtained separately. The reviewed presets document corrected candidate settings, but are not an archive of fitted models or fold-specific tuning results. See the [reproduction status](docs/REPRODUCIBILITY.md).
 
-The repository does **not** include GBIF exports, RRN or SNCF records, environmental rasters, administrative layers, hunting-bag tables, predictor stacks, model objects, figures or result tables. Some source products are openly obtainable; RRN and SNCF records require authorisation from their respective data holders. Exact numerical reproduction also requires matching the source releases, preprocessing decisions and software environment used for the analysis.
+## Start here
+
+| Your task | Guide |
+|---|---|
+| Install the environment and run the first checks | [Quick start](docs/QUICKSTART.md) |
+| Choose or adapt a configuration | [Configuration guide](docs/CONFIGURATION.md) and [config index](configs/README.md) |
+| Find code behind a manuscript figure, table or supplement | [Manuscript crosswalk](docs/MANUSCRIPT_CROSSWALK.md) |
+| Understand the study design and implementation | [Methods and workflow](docs/METHODS.md) |
+| Prepare occurrences, rasters and bias layers | [Data guide](data/README.md) and [predictor reference](docs/PREDICTORS.md) |
+| Rebuild review-stage outputs from existing runs | [Review workflow](review/README.md) and [output reference](docs/OUTPUTS.md) |
+| Reuse, contribute to or archive the software | [Contributing](CONTRIBUTING.md), [citation](CITATION.cff), [release guide](docs/PUBLIC_RELEASE.md) |
+
+The [documentation home](docs/README.md) links all guides. The [configuration migration table](docs/CONFIG_MIGRATION.md) maps previous filenames to their new locations.
+
+## Study at a glance
+
+| Dimension | Definition |
+|---|---|
+| Domain | Mainland France; common SDM grid in Lambert-93, EPSG:2154, at 1 km resolution |
+| Summer | March to August, study model years 2018 through 2023 |
+| Winter | September to February, labelled by its starting year, 2017 through 2023 |
+| Occurrence scenarios | GBIF only; GBIF + RRN road collisions + SNCF rail collisions |
+| Temporal representations | Year-specific predictors; predictors averaged over training years |
+| Model engines | MaxEnt through `elapid`; GBM through `lightgbm` |
+| Outer evaluation | Leave one year out, then project to that year's predictor stack |
+| Interpretation | Relative habitat suitability; not calibrated occurrence or collision probability |
+
+Winter 2023 includes January and February 2024. A common 1 km modelling grid does not imply that every source product was observed at 1 km resolution. The land-cover classification stage uses 30 m imagery; its training assets are outside this snapshot.
+
+## Install and inspect
+
+Run from the repository root. Python 3.10+ is required by the source syntax; CI uses Python 3.11 for lightweight checks.
+
+```bash
+git clone https://github.com/waldstrom/wildboar-france-multitemp-sdm.git
+cd wildboar-france-multitemp-sdm
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python scripts/validate_repository.py
+python scripts/validate_documentation.py
+```
+
+On Windows PowerShell, activate with `.\.venv\Scripts\Activate.ps1`. See the [environment notes](docs/QUICKSTART.md#environment) for geospatial dependencies. The dependency list is not a historical lockfile.
+
+After preparing the inputs and reading the [reviewed preset notes](configs/reviewed/README.md):
+
+```bash
+# Four seasonal/temporal scenarios per file, each run with both engines.
+python -m scripts.meta_run_leave_one_year --config configs/reviewed/loyo_all_sources.yaml
+python -m scripts.meta_run_leave_one_year_gbif --config configs/reviewed/loyo_gbif.yaml
+```
+
+These are full modelling jobs requiring local data and substantial computation. They use the supplied parameters; the meta runners do not launch nested Optuna tuning.
 
 ## Repository layout
 
-| Path | Purpose |
+| Directory | Contents |
 |---|---|
-| `scripts/` | core pipeline, model training, evaluation and experiment runners |
-| `configs/` | generated year/season/source scenario configurations |
-| `data/` | documentation-only placeholders for local inputs |
-| `outputs/` | documentation-only placeholder for generated results |
-| `review/` | code used to audit and rebuild review-stage artefacts |
-| `tests/`, `review/tests/` | automated tests |
-| `docs/` | configuration, provenance and public-release guidance |
+| [configs/reviewed](configs/reviewed/README.md) | Corrected study starting configurations |
+| [configs/experiments](configs/experiments/README.md) | Historical seasonal and engine comparisons |
+| [configs/tuning](configs/tuning/README.md) | Separate parameter-search experiments |
+| [configs/legacy](configs/legacy/README.md) | Earlier pipeline presets and 44 year/source snapshots |
+| [configs/features](configs/features/README.md), [configs/postprocessing](configs/postprocessing/README.md) | Predictor selection and analysis settings |
+| [scripts](scripts/README.md) | Processing, training, diagnostics and validation |
+| [data](data/README.md), [outputs](outputs/README.md) | Input acquisition guides and local output locations |
+| [review](review/README.md) | Hunting correction, saved-run finalization and audits |
+| [docs](docs/README.md) | Methods, cross-references and reproducibility guidance |
+| [tests](tests), [review/tests](review/tests) | Synthetic and unit tests |
 
-## Installation
+## Citation and licence
 
-Python 3.10 or newer is required by the type syntax used in the code. Create an isolated environment and install the runtime dependencies:
+Meyer AF, Reibel T, Morelle K, Kneubühler M, Jordan D (2026) Wild Boar Collision Data and Satellite Computer Vision Refine Habitat Suitability Mapping across France. Research Square, Version 1. [doi:10.21203/rs.3.rs-8798859/v1](https://doi.org/10.21203/rs.3.rs-8798859/v1).
 
-```bash
-python -m venv .venv
-source .venv/bin/activate          # Linux/macOS
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-```
+[CITATION.cff](CITATION.cff) supplies software and preferred study citation metadata; [codemeta.json](codemeta.json) supplies machine-readable software metadata. Record the commit or archived software release used alongside the paper citation. The preprint DOI identifies the paper, not a software release.
 
-On Windows PowerShell, activate with `.\.venv\Scripts\Activate.ps1`. The convenience scripts `setup.sh` and `setup.ps1` install the same runtime requirements. Geospatial packages may additionally require platform-compatible GDAL/PROJ libraries.
+Code, configuration files and original repository documentation are licensed under the [BSD 3-Clause License](LICENSE). Third-party data, model weights and publications retain their own licences and access conditions. See [licensing and attribution](docs/LICENSING.md).
 
-`requirements.txt` records the required packages but does not pin a complete historical environment. For an archival analysis, record the exact resolved versions alongside the run provenance.
-
-## Prepare the data
-
-Start with [`data/README.md`](data/README.md), then read the guide in each required subdirectory. The supplied configurations expect local paths below `data/`, but no downloader silently fetches or redistributes restricted material.
-
-Before running a model, verify that:
-
-1. the occurrence table follows the documented schema and its declared CRS matches the actual coordinates;
-2. all rasters share the configured CRS, extent, origin, dimensions, resolution and nodata convention;
-3. Summer/Winter labels and cross-calendar winter years are assigned consistently across occurrences and predictors;
-4. every input has a local provenance record, ideally based on [`docs/DATA_PROVENANCE_TEMPLATE.md`](docs/DATA_PROVENANCE_TEMPLATE.md).
-
-## Select a configuration
-
-The main entry configurations are summarised in [`docs/CONFIGURATION.md`](docs/CONFIGURATION.md). Typical examples are:
-
-```bash
-# Baseline seasonal models
-python scripts/run_pipeline.py --config configwinter.yaml
-python scripts/run_pipeline.py --config configsummer.yaml
-
-# Aggregate leave-one-year-out comparison
-python scripts/meta_run_leave_one_year.py --config config_gbm_loyo_compare.yaml
-
-# One explicit year/source scenario
-python scripts/run_pipeline.py --config configs/2022-Winter_ALL.yaml
-```
-
-Use `python <script> --help` for specialised runners that expose command-line options. Large runs create experiment-specific output directories; do not reuse a directory unless the workflow explicitly supports resuming it.
-
-## Review-stage utilities
-
-The `review/` package and the two root-level review scripts reconstruct review tables, figures and diagnostics from authorised local run artefacts. `review/input/` and `review/output/` contain documentation only. See [`review/README.md`](review/README.md) for the expected package structure and commands.
-
-## Validation and tests
-
-The hygiene check uses only the Python standard library and should run before every commit:
-
-```bash
-python scripts/validate_repository.py
-python -m compileall -q scripts review review-corrections.py review-finalize-existing-run.py
-```
-
-Install development dependencies to run the full test suite:
-
-```bash
-python -m pip install -r requirements-dev.txt
-pytest
-```
-
-Continuous integration performs the data-free repository check and compiles all Python sources. It intentionally does not download data or launch computationally expensive model runs.
-
-## Outputs
-
-Generated models, maps, figures, logs, response curves, statistics and cached stacks belong in ignored local directories. See [`outputs/README.md`](outputs/README.md) for archiving guidance.
-
-## Citation
-
-If you use this code or workflow in scientific work, please cite the associated preprint:
-
-Meyer AF, Reibel T, Morelle K, Kneubühler M, Jordan D (2026) Wild Boar Collision Data and Satellite Computer Vision Refine Habitat Suitability Mapping across France. Research Square, Version 1. https://doi.org/10.21203/rs.3.rs-8798859/v1
-
-The preprint is available at Research Square and is licensed separately under CC BY 4.0.
-
-For software-specific citation metadata, see CITATION.cff. When citing a specific archived software release, please additionally cite the corresponding release DOI if available.
-
-Copyright © 2026 Adrian Ferdinand Meyer and contributors.
-
-## Licence 
-
-The source code in this repository is released under the BSD 3-Clause License. See LICENSE for the full licence terms.
-
-Unless explicitly stated otherwise, this licence applies to the software, configuration files and original documentation contained in this repository. It does not grant rights to third-party datasets or other externally sourced materials. GBIF, RRN, SNCF, environmental, administrative and other input datasets remain subject to the licences, terms of use and access restrictions imposed by their respective data providers.
-
-No restricted research data are distributed with this repository.
-
-If you use this software in scientific work, please cite the associated publication and, where applicable, the archived software release. Citation information will be provided in CITATION.cff.
-
-Copyright © 2026 Adrian Meyer and contributors.
+Maintainer: Adrian Ferdinand Meyer, Institute Geomatics, FHNW. Code questions: [GitHub issues](https://github.com/waldstrom/wildboar-france-multitemp-sdm/issues). Data requests follow the [data guide](data/README.md).

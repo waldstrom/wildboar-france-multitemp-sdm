@@ -67,7 +67,7 @@ scenarios:
     season: Winter
     expect_hunting: true
     source:
-      aggregate_config: config_gbm_loyo_compare.yaml
+      aggregate_config: configs/experiments/config_gbm_loyo_compare.yaml
       selector:
         runner: monotemporal
         season: Winter
@@ -84,7 +84,7 @@ scenarios:
     season: Winter
     expect_hunting: true
     source:
-      aggregate_config: config_gbm_loyo_compare.yaml
+      aggregate_config: configs/experiments/config_gbm_loyo_compare.yaml
       selector:
         runner: multitemporal
         season: Winter
@@ -101,7 +101,7 @@ scenarios:
     season: Winter
     expect_hunting: true
     source:
-      aggregate_config: config_gbm_loyo_gbif.yaml
+      aggregate_config: configs/experiments/config_gbm_loyo_gbif.yaml
       selector:
         runner: monotemporal
         season: Winter
@@ -118,7 +118,7 @@ scenarios:
     season: Winter
     expect_hunting: true
     source:
-      aggregate_config: config_gbm_loyo_gbif.yaml
+      aggregate_config: configs/experiments/config_gbm_loyo_gbif.yaml
       selector:
         runner: multitemporal
         season: Winter
@@ -137,7 +137,7 @@ scenarios:
     season: Winter
     expect_hunting: false
     source:
-      aggregate_config: config_gbm_loyo_compare.yaml
+      aggregate_config: configs/experiments/config_gbm_loyo_compare.yaml
       selector:
         runner: monotemporal
         season: Winter
@@ -154,7 +154,7 @@ scenarios:
     season: Winter
     expect_hunting: false
     source:
-      aggregate_config: config_gbm_loyo_gbif.yaml
+      aggregate_config: configs/experiments/config_gbm_loyo_gbif.yaml
       selector:
         runner: monotemporal
         season: Winter

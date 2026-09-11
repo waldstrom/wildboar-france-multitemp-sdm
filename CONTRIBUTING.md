@@ -1,49 +1,42 @@
 # Contributing
 
-Contributions should keep this repository inspectable, reproducible and safe to share.
+[Documentation](docs/README.md) · [Configuration guide](docs/CONFIGURATION.md) · [Licence](LICENSE)
 
-## Before changing code
-
-Open a focused branch and identify the configuration and workflow affected by the change. Avoid mixing scientific-method changes, refactoring and regenerated result files in one commit.
-
-## Data policy
-
-This is a code-only repository. Do not commit occurrence records, collision records, environmental rasters, vectors, model objects, figures, result tables, archives or local provenance files. Tests should create small synthetic inputs at runtime in temporary directories rather than add fixtures containing research data.
-
-When code introduces a new path below `data/<category>/`, add or update `data/<category>/README.md` with:
-
-- the expected filenames and schema;
-- the authoritative provider or access route;
-- licence and access restrictions;
-- spatial, temporal and unit conventions;
-- the processing needed to reach the pipeline-ready format.
-
-Never commit credentials, private download links, confidential agreement text, personal identifiers or machine-specific absolute paths.
+Keep changes focused and scientifically traceable. Identify the affected runner/configuration and distinguish documentation or refactoring from changes to fitting, sampling, evaluation or predictor semantics.
 
 ## Code and configuration changes
 
-Keep paths relative to the repository root. Preserve deterministic seeds where randomness is used. Add a concise docstring or comment for non-obvious scientific transformations, and update `docs/CONFIGURATION.md` when entry points or configuration semantics change.
+- Use repository-relative model paths and preserve deterministic controls.
+- Add new YAMLs to [configs/catalog.yaml](configs/catalog.yaml), including their consumer and study references.
+- Put reviewed starting examples, historical experiments, tuning and legacy configs in their documented folders.
+- Do not silently change historical settings or treat a candidate as a guaranteed retained feature.
+- Update [the manuscript crosswalk](docs/MANUSCRIPT_CROSSWALK.md) when a publication mapping changes.
+- Preserve existing output paths unless the change includes a migration plan for saved-run consumers.
+- Use small synthetic inputs for meaningful regression tests; do not bundle research data as fixtures.
 
-Generated scenario files under `configs/` should be regenerated from their source logic rather than edited inconsistently one by one.
+## Data policy
+
+Do not commit occurrence/collision records, environmental rasters, vectors, fitted models, result tables, figures, archives, credentials or confidential local manifests. Add acquisition/preparation documentation when introducing a new data category. The [data guide](data/README.md) defines source access and grid conventions.
+
+Generated products belong below ignored experiment/output directories. Document inputs, software versions and transformations in authorized local run records.
 
 ## Checks
 
-Run the lightweight release checks before opening a pull request:
-
 ```bash
 python scripts/validate_repository.py
+python scripts/validate_documentation.py
 python -m compileall -q scripts review review-corrections.py review-finalize-existing-run.py
 ```
 
-For the full test suite, install the development requirements and run:
+For relevant code changes, install development requirements and run the affected synthetic tests:
 
 ```bash
 python -m pip install -r requirements-dev.txt
-pytest
+python -m pytest
 ```
 
-Full geospatial tests may require system libraries compatible with Rasterio, GeoPandas and LightGBM.
+Lightweight CI validates the code-only tree, YAML/catalog, documentation links and metadata and compiles Python. It does not fetch input data or fit full models.
 
-## Public releases
+## Pull requests and releases
 
-Do not make the historical private repository public. Follow `docs/PUBLIC_RELEASE.md` to create a new history-free repository after the publication tree has been reviewed.
+Describe the problem, change, affected workflows, scientific parameter changes (if any) and verification performed. Link affected configs and document any reproduction limitation. The [release guide](docs/PUBLIC_RELEASE.md) covers code-only exports and metadata updates.

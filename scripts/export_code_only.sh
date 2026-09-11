@@ -3,7 +3,7 @@
 set -euo pipefail
 
 ROOT="$(git rev-parse --show-toplevel)"
-DEFAULT_DESTINATION="$(dirname "$ROOT")/maxent-code-only"
+DEFAULT_DESTINATION="$(dirname "$ROOT")/wildboar-france-code-only"
 DESTINATION="${1:-$DEFAULT_DESTINATION}"
 
 if [[ "$DESTINATION" != /* ]]; then
@@ -13,7 +13,10 @@ fi
 cd "$ROOT"
 python scripts/validate_repository.py
 
-rm -rf "$DESTINATION"
+if [[ -e "$DESTINATION" ]]; then
+  echo "Destination already exists; choose a new directory: $DESTINATION" >&2
+  exit 1
+fi
 mkdir -p "$DESTINATION"
 git archive --format=tar HEAD | tar -xf - -C "$DESTINATION"
 
@@ -26,8 +29,8 @@ cat <<EOF
 Created a history-free code export at:
   $DESTINATION
 
-Publish that directory as a NEW repository; do not make the source repository
-public because deleted data remain in its Git history. Typical commands:
+The export contains this commit without Git history. To create a separate
+repository from it, use a new empty remote. Example commands:
 
   cd "$DESTINATION"
   git init -b main

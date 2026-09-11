@@ -7,7 +7,7 @@ cross-validation of the best model is optional and only executed when the
 configuration enables it.
 
 Scenarios are defined in a single YAML configuration (default:
-``config_gbm-compare.yaml``) that bundles the individual seasonal settings for
+``configs/experiments/config_gbm-compare.yaml``) that bundles the individual seasonal settings for
 GBM vs. MaxEnt comparison runs.
 """
 from __future__ import annotations
@@ -376,7 +376,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Run GBM vs. MaxEnt seasonal scenarios")
     ap.add_argument(
         "--config",
-        default="config_gbm-compare.yaml",
+        default="configs/experiments/config_gbm-compare.yaml",
         help="Aggregate YAML containing scenario definitions",
     )
     args = ap.parse_args()

@@ -69,10 +69,10 @@ def _objective(trial: optuna.Trial, base_cfg: dict, module) -> float:
 
 def main() -> None:
     scenarios = [
-        ("configmultitemporal_winter.yaml", multitemporal),
-        ("configwinter_monotemporal.yaml", monotemporal),
-        ("configmultitemporal_summer.yaml", multitemporal),
-        ("configsummer_monotemporal.yaml", monotemporal),
+        ("configs/experiments/configmultitemporal_winter.yaml", multitemporal),
+        ("configs/experiments/configwinter_monotemporal.yaml", monotemporal),
+        ("configs/experiments/configmultitemporal_summer.yaml", multitemporal),
+        ("configs/experiments/configsummer_monotemporal.yaml", monotemporal),
     ]
     results = []
     for cfg_name, module in scenarios:

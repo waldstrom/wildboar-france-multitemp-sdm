@@ -445,7 +445,7 @@ def _apply_feature_config(
         return ds
 
     fc_path = (
-        mt_cfg.get("vif", {}).get("feature_config", "featureconfig.yaml")
+        mt_cfg.get("vif", {}).get("feature_config", "configs/features/featureconfig.yaml")
     )
     if Path(fc_path).exists():
         try:

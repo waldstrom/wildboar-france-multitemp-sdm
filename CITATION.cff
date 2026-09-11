@@ -1,0 +1,51 @@
+cff-version: 1.2.0
+message: >-
+  Please cite the associated study and record the software commit or archived
+  release used. The preferred citation DOI identifies the preprint, not software.
+type: software
+title: "Wild Boar Habitat Suitability Modelling for France"
+abstract: >-
+  Code-only Python workflows for seasonal presence-background habitat suitability
+  modelling of Sus scrofa in mainland France, comparing multitemporal and
+  training-year-averaged MaxEnt and LightGBM models with leave-one-year-out
+  evaluation, bias-aware background sampling and environmental diagnostics.
+authors:
+  - family-names: Meyer
+    given-names: Adrian Ferdinand
+    affiliation: "Institute Geomatics, FHNW; Department of Geography, University of Zurich"
+  - family-names: Reibel
+    given-names: Théo
+    affiliation: "Institute Geomatics, FHNW"
+repository-code: "https://github.com/waldstrom/wildboar-france-multitemp-sdm"
+url: "https://github.com/waldstrom/wildboar-france-multitemp-sdm"
+license: BSD-3-Clause
+keywords:
+  - Sus scrofa
+  - species distribution modelling
+  - habitat suitability
+  - France
+  - MaxEnt
+  - LightGBM
+  - remote sensing
+  - multitemporal modelling
+  - leave-one-year-out validation
+  - wildlife-vehicle collisions
+preferred-citation:
+  type: article
+  title: "Wild Boar Collision Data and Satellite Computer Vision Refine Habitat Suitability Mapping across France"
+  authors:
+    - family-names: Meyer
+      given-names: Adrian Ferdinand
+    - family-names: Reibel
+      given-names: Théo
+    - family-names: Morelle
+      given-names: Kevin
+    - family-names: Kneubühler
+      given-names: Mathias
+    - family-names: Jordan
+      given-names: Denis
+  year: 2026
+  journal: "Research Square"
+  doi: "10.21203/rs.3.rs-8798859/v1"
+  url: "https://www.researchsquare.com/article/rs-8798859/v1"
+  notes: "Preprint, Version 1. Reviewed-document cross-references are recorded separately in docs/MANUSCRIPT_CROSSWALK.md."

@@ -248,7 +248,7 @@ def objective(trial: optuna.Trial, cfg: dict, static_parts: dict, exp_dir: Path)
 # -----------------------------------------------------------------------------  
 
 def run_study(
-    cfg_file: Path | dict = Path("config.yaml"),
+    cfg_file: Path | dict = Path("configs/legacy/config.yaml"),
     suffix: str | None = None,
     prebuilt_stack: Path | None = None,
 ):
@@ -444,7 +444,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument(
         "--config",
-        default="configtuning.yaml",
+        default="configs/tuning/configtuning.yaml",
         help="Combined tuning configuration YAML",
     )
     args = ap.parse_args()
