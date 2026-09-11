@@ -8,7 +8,9 @@
 # Version: v.0.1.0
 # =============================================================================
 """
-Unified command-line front-end:  python scripts/run_pipeline.py --config config.yaml
+Unified command-line front-end::
+
+    python scripts/run_pipeline.py --config configs/legacy/config.yaml
 """
 from __future__ import annotations
 import argparse
@@ -152,7 +154,11 @@ def _load_thinned_presences(cfg: dict):
 # -----------------------------------------------------------------------------  
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--config", default="config.yaml", help="Path to YAML configuration")
+    ap.add_argument(
+        "--config",
+        default="configs/legacy/config.yaml",
+        help="Path to YAML configuration",
+    )
     ap.add_argument(
         "--debug", action="store_true", help="Enable debug mode (limit to 2021 test year)"
     )

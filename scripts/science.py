@@ -22,7 +22,7 @@ it
 Example
 -------
 
-``python -m scripts.science --config config.yaml --season 2022-Winter``
+``python -m scripts.science --config configs/legacy/config.yaml --season 2022-Winter``
 
 The script writes all outputs to the experiment directory configured in the
 YAML file (or a timestamped folder when omitted).
@@ -57,7 +57,11 @@ def _update_metric_order(metrics: list[str]) -> list[str]:
 
 def main(argv: list[str] | None = None) -> None:
     ap = argparse.ArgumentParser(description="Run full scientific pipeline")
-    ap.add_argument("--config", default="config.yaml", help="Path to YAML configuration")
+    ap.add_argument(
+        "--config",
+        default="configs/legacy/config.yaml",
+        help="Path to YAML configuration",
+    )
     ap.add_argument(
         "--season",
         action="append",
@@ -123,4 +127,3 @@ def main(argv: list[str] | None = None) -> None:
 
 if __name__ == "__main__":  # pragma: no cover - manual entry point
     main()
-

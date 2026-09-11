@@ -194,7 +194,7 @@ def objective(
 
 
 def run_study(
-    cfg_input: Path | dict = Path("config.yaml"),
+    cfg_input: Path | dict = Path("configs/legacy/config.yaml"),
     suffix: str | None = None,
     prebuilt_stack: Path | None = None,
 ) -> tuple[Path, dict[str, Any]]:
