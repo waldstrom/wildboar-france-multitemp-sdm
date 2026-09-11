@@ -1,6 +1,5 @@
 # Wild boar habitat suitability across France
 
-[![Repository checks](https://github.com/waldstrom/wildboar-france-multitemp-sdm/actions/workflows/repository-hygiene.yml/badge.svg)](https://github.com/waldstrom/wildboar-france-multitemp-sdm/actions/workflows/repository-hygiene.yml)
 [![License: BSD 3-Clause](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](LICENSE)
 [![Study preprint](https://img.shields.io/badge/Preprint-Research_Square-008080.svg)](https://doi.org/10.21203/rs.3.rs-8798859/v1)
 
