@@ -38,7 +38,7 @@ The combined table contains one wild-boar observation or collision record per ro
 | Field | Meaning |
 |---|---|
 | `dd long`, `dd lat` | coordinate columns used by the legacy pipeline |
-| `year`, `year-int` | calendar/test year; some configurations use one name, some the other |
+| `year`, `year-int` | Model-season year; Winter uses its starting year. Configurations use different column names |
 | `month`, `month-int` | month label and integer month |
 | `source` | `GBIF`, `RRN` or `SNCF` |
 | `season` | `Summer` or `Winter` |
@@ -80,3 +80,8 @@ For every input, record at minimum: provider, product name, release/version, DOI
 ## Repository rule
 
 Run `python scripts/validate_repository.py` before every commit. It fails when data or generated outputs are tracked below this directory.
+## Links to the reviewed study
+
+Winter `y` means September `y` through February `y+1`; Summer `y` means March-August `y`. Thus Winter 2023 requires records and seasonal inputs extending into February 2024. Prepare those labels upstream; the seasonal loader filters supplied labels.
+
+See [Predictors](../docs/PREDICTORS.md) for units and feature naming, [Configuration](../docs/CONFIGURATION.md) for path semantics, and [the manuscript crosswalk](../docs/MANUSCRIPT_CROSSWALK.md) for S1-S5 links.

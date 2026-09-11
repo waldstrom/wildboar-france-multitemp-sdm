@@ -10,7 +10,7 @@
 """Run pipeline for each season and data source combination.
 
 This refactored version relies on pre-generated configuration files located
-in the repository ``configs`` directory. Each file encodes a specific season
+in the repository ``configs/legacy/scenarios`` directory. Each file encodes a specific season
 and data source. For every config a temporary copy is created where the
 ``experiment.name`` points to a unique sub directory under a new parent folder
 ``exps/seasontest_<date>_<time>``. The pipeline is then executed sequentially
@@ -48,14 +48,14 @@ def main() -> None:
     config_dir = parent_dir / "configs"
     config_dir.mkdir(parents=True, exist_ok=True)
 
-    cfg_src_dir = Path("configs")
+    cfg_src_dir = Path("configs/legacy/scenarios")
     cfg_files = sorted(cfg_src_dir.glob("*.yaml"))
 
     # Run preprocessing once for all seasons
     master_proc = parent_dir / "processed_master"
     env_master = os.environ.copy()
     env_master["PROCESSED_DATA_DIR"] = str(master_proc)
-    base_cfg = Path("configall.yaml").read_text()
+    base_cfg = Path("configs/legacy/configall.yaml").read_text()
     pre_cfg = modify_config(base_cfg, f"{parent_name}/preprocess")
     for step in [
         "variable_selection",

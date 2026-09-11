@@ -45,8 +45,8 @@ from scripts.evaluation import _compute_metrics
 log = logging.getLogger(__name__)
 
 DEFAULT_CONFIG_PATHS = [
-    Path("configmultitemporal_winter.yaml"),
-    Path("configmultitemporal_summer.yaml"),
+    Path("configs/experiments/configmultitemporal_winter.yaml"),
+    Path("configs/experiments/configmultitemporal_summer.yaml"),
 ]
 DEFAULT_OUTPUT_ROOT = Path("exps") / "bias-test"
 

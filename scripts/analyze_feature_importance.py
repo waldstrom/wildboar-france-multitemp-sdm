@@ -1,7 +1,7 @@
 """Aggregate and compare permutation feature importances from ELAPID runs.
 
 This helper script ingests configuration from a companion YAML file (see
-``analyze_feature_importance_config.yaml`` in the same directory).  Each meta
+``configs/postprocessing/analyze_feature_importance.yaml``).  Each meta
 run entry specifies the path to ``best_runs.csv`` *and* one or more directories
 that store the corresponding permutation feature importance artefacts.  This is
 necessary because ``best_runs.csv`` files are often generated in meta run output
@@ -32,7 +32,7 @@ from statsmodels.tools.tools import add_constant
 import yaml
 from tqdm.auto import tqdm
 
-DEFAULT_CONFIG_PATH = Path(__file__).with_name("analyze_feature_importance_config.yaml")
+DEFAULT_CONFIG_PATH = Path(__file__).resolve().parents[1] / "configs/postprocessing/analyze_feature_importance.yaml"
 
 log = logging.getLogger("feature_importance_analysis")
 

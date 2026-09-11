@@ -1,127 +1,84 @@
-# Winter-monotemporal hunting correction
+# Review correction and saved-run finalization
 
-This package is designed to be copied directly into the root of `maxent-repo`.
-Its only top-level executable is `review-corrections.py`; implementation files,
-configuration, tests and documentation live below `review/`.
+[Repository home](../README.md) · [Manuscript crosswalk](../docs/MANUSCRIPT_CROSSWALK.md) · [Reproduction status](../docs/REPRODUCIBILITY.md)
 
-## What it corrects
+The review package reconstructs affected winter-model outputs from authorized local inputs and records the hunting-candidate correction. It is already integrated into this repository. The root launchers are [review-corrections.py](../review-corrections.py) and [review-finalize-existing-run.py](../review-finalize-existing-run.py).
 
-The published winter comparison used `include_hunting: false` for the
-winter-monotemporal configuration and `include_hunting: true` for the matched
-winter-multitemporal configuration. The correction runner creates immutable
-scenario copies with hunting activated and rebuilds all affected stacks and
-models.
+## Original setting and correction
 
-A predictor can be **activated as a candidate** and still be removed in an
-individual LOYO fold by the existing correlation/VIF selection. The generated
-S7 audit therefore reports separately:
+Historical winter monotemporal configurations disabled `multitemporal.include_hunting`, while matched multitemporal configurations enabled it. The correction runner selects those historical aggregate scenarios, writes immutable copies with hunting activated, and rebuilds their stacks/models. Historical source files stay available under [configs/experiments](../configs/experiments/README.md).
 
-- whether every annual hunting raster exists;
-- whether a hunting-named variable entered the fresh master stack;
-- whether the materialized fold stack contains it;
-- whether it was retained in `selected_predictors.txt`.
+The [reviewed presets](../configs/reviewed/README.md) are separate starting examples for new runs. The correction package intentionally continues to use historical sources so its before/after audit remains meaningful.
 
-This prevents “activated” from being confused with “forced into every model.”
+Candidate inclusion is not forced retention. Audits distinguish annual hunting-raster availability, inclusion in the master stack, inclusion in each materialized fold, and retention after predictor selection.
 
-## Default model set
+## Configuration files
 
-The default command runs four matched winter scenarios, all with both `elapid`
-and `gbm`:
+| File | Purpose |
+|---|---|
+| [review-corrections.yaml](config/review-corrections.yaml) | Scenarios, historical source selectors, patches, controls and validation |
+| [configwinter_monotemporal_hunting.overlay.yaml](config/configwinter_monotemporal_hunting.overlay.yaml) | Minimal hunting-candidate correction |
+| [artifact-manifest.yaml](config/artifact-manifest.yaml) | Stable export directories plus current manuscript references |
 
-1. winter monotemporal, GBIF + WVC — **corrected**;
-2. winter multitemporal, GBIF + WVC — regenerated reference;
-3. winter monotemporal, GBIF-only — **corrected**;
-4. winter multitemporal, GBIF-only — regenerated reference.
+The default model set comprises corrected winter monotemporal and matched multitemporal reference runs for all-source and GBIF-only data, using both engines. Summer is outside this correction. Optional no-hunting controls reproduce the historical candidate setting.
 
-Summer is not rerun because the reviewer-identified setting is confined to the
-winter-monotemporal comparison. Two optional no-hunting controls reproduce the
-old setting when `--include-controls` is supplied.
-
-## First commands
+## Inspect, fit and resume
 
 ```bash
 python review-corrections.py self-test
 python review-corrections.py plan
 python review-corrections.py run --dry-run
+```
+
+The dry run writes resolved local configurations and input/audit information without model fitting. It still needs the configured software environment and can report missing research inputs.
+
+After supplying those inputs:
+
+```bash
 python review-corrections.py run
+python review-corrections.py run --resume review/output/EXISTING_RUN
 ```
 
-The dry run resolves all embedded aggregate scenarios, writes immutable corrected
-YAML files, inventories repository-wide disabled hunting settings, and checks the
-package without executing models.
+Replace `EXISTING_RUN` with the actual run directory. Completed work is reused according to the runner's checks; incomplete artifacts are handled in isolated run directories.
 
-A failed run is resumable:
+| Option / command | Effect |
+|---|---|
+| `run --corrected-only` | Limits fitting to corrected monotemporal scenarios; comparison products may lack references |
+| `run --include-controls` | Adds explicit historical no-hunting controls |
+| `export --run-dir ...` | Rebuilds exports from an available run |
+| `validate --run-dir ...` | Checks an existing run against package requirements |
+
+## Finalize existing results
 
 ```bash
-python review-corrections.py run --resume review/output/<RUN_ID>
+python review-finalize-existing-run.py --source-run review/output/EXISTING_RUN --n-repeats 5
 ```
 
-Completed scenarios and diagnostics are skipped. Partial experiment directories
-are archived before a fresh restart, so a stale Zarr stack is never silently
-accepted.
+Finalization does not refit models. It reads saved metrics/configuration audits, rebuilds summaries and can compute an all-fold hunting permutation diagnostic for corrected winter monotemporal MaxEnt models. It needs saved models, predictor metadata, point inputs and stacks. `--skip-hunting-importance` skips that diagnostic; `--resume-output` with the same `--run-id` can continue a compatible finalization.
 
-Useful controlled variants:
+The finalizer defaults to ten repeats; the example explicitly requests five to match the manuscript's repeat count. This hunting-only diagnostic is not a full-feature S6b exporter. The older [feature-importance runner](scripts/run_feature_importance.py) operates on best folds and training/background inputs. Read [feature-importance scope](../docs/REPRODUCIBILITY.md#feature-importance-coverage) before associating either output with the final supplement.
 
-```bash
-# Run only the two corrected monotemporal models. Comparison figures requiring
-# regenerated multitemporal references may be incomplete.
-python review-corrections.py run --corrected-only
+## Run folders
 
-# Quantify the exact old-vs-corrected difference.
-python review-corrections.py run --include-controls
+| Directory | Contents |
+|---|---|
+| `00_RUN/` | Logs, provenance, audits and replacement register |
+| `01_INPUT/` | Source/resolved configs and publication source index, if supplied |
+| `02_MODELS/` | Isolated model runs |
+| `03_MANUSCRIPT/` | Main-document export artifacts |
+| `04_SUPPLEMENT/` | Supplement export artifacts |
+| `05_DIAGNOSTICS/` | Hunting, importance and novelty diagnostics |
+| `06_MACHINE_READABLE/` | Combined result tables |
+| `07_ARCHIVE/` | Publication bundle and exclusion index |
 
-# Re-export after changing only publication formatting.
-python review-corrections.py export --run-dir review/output/<RUN_ID>
+These are local generated artifacts, excluded from Git. A run can supply a publication source index; the code-only repository does not include `current_publication_index.csv` or the original manuscript files. See [input requirements](input/README.md).
 
-# Validate an existing run.
-python review-corrections.py validate --run-dir review/output/<RUN_ID>
-```
+## Current manuscript numbering
 
-## Timestamped output tree
+The [crosswalk](../docs/MANUSCRIPT_CROSSWALK.md#historical-export-names-versus-current-numbering) reconciles historical directory names with the reviewed PDFs. LOYO performance is current **Table 3**, metrics are **S6a**, full importance is **S6b**, response curves are **S7**, annual maps are **S8**, and novelty is **S9**. A directory containing `S7_feature_provenance` is an internal audit, not current S7.
 
-```text
-review/output/<YYYYMMDD_HHMMSS_ZONE_hunting-correction>/
-├── 00_RUN/              logs, provenance, audits, validation, replacement register
-├── 01_INPUT/            source and resolved configurations, source-publication index
-├── 02_MODELS/           isolated model runs in deterministic scenario order
-├── 03_MANUSCRIPT/       replacement artifacts in manuscript order
-├── 04_SUPPLEMENT/       S5, S6, S7 and further supplement exports in order
-├── 05_DIAGNOSTICS/      hunting audit, feature importance, MESS/NT1/NT2
-├── 06_MACHINE_READABLE/ combined corrected tables
-└── 07_ARCHIVE/          compact publication bundle and large-file exclusion index
-```
+Directory names stay unchanged for compatibility with saved runs. The artifact manifest now includes a separate `document_reference` field and updated human-readable labels.
 
-`review/output/LATEST.txt` points to the latest successful run.
+## Novelty and provenance
 
-## Publication artifacts that must be replaced
-
-The package treats the following as affected and generates each programmatically:
-
-1. the central LOYO performance table, including corrected winter-monotemporal
-   rows and recomputed confidence intervals;
-2. every performance figure containing winter-monotemporal CBI/AUC values;
-3. the 2019 winter composite map wherever a monotemporal panel appears;
-4. winter feature-importance outputs;
-5. numerical values quoted in Results or Discussion;
-6. Supplement S5 configuration excerpts;
-7. Supplement S6 fold-wise metrics and confidence intervals;
-8. Supplement S7 predictor provenance / selected-feature records;
-9. winter response curves and full feature-importance files;
-10. winter monotemporal MESS, limiting-variable, NT1/NT2 and comparison outputs;
-11. all winter-monotemporal held-out-year prediction maps.
-
-The included `review/input/current_publication_index.csv` is extracted from the
-current manuscript DOCX and supplement PDF supplied with the review package. It
-provides a searchable source index; the semantic export folders remain stable if
-typesetting later changes figure numbering.
-
-## Safety and reproducibility
-
-- Original repository YAML files are never edited.
-- Every run gets an isolated stack and experiment directory.
-- Corrected scenarios always execute with `rebuild=True`.
-- Both config snapshots and unified diffs are retained.
-- Git commit, dirty status, Python environment and file hashes are recorded.
-- A failed hunting-source or master-stack audit stops publication export by default.
-- The compact ZIP excludes individual files larger than the configured threshold;
-  the complete files remain in the timestamped run directory and are indexed.
+The review novelty wrapper uses the default 99th-percentile Mahalanobis reference in the core novelty script. The manuscript describes a maximum reference. Check the actual saved settings using the [novelty note](../docs/REPRODUCIBILITY.md#novelty-threshold). Keep source/resolved YAMLs, model feature order, input checksums and environment records with every export.

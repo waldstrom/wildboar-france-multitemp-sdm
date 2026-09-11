@@ -1,0 +1,59 @@
+{
+  "@context": "https://w3id.org/codemeta/3.0",
+  "@type": "SoftwareSourceCode",
+  "name": "Wild Boar Habitat Suitability Modelling for France",
+  "description": "Code-only Python workflows for seasonal presence-background habitat suitability modelling of Sus scrofa in mainland France, comparing multitemporal and training-year-averaged MaxEnt and LightGBM models with leave-one-year-out evaluation, bias-aware background sampling and environmental diagnostics.",
+  "codeRepository": "https://github.com/waldstrom/wildboar-france-multitemp-sdm",
+  "url": "https://github.com/waldstrom/wildboar-france-multitemp-sdm",
+  "issueTracker": "https://github.com/waldstrom/wildboar-france-multitemp-sdm/issues",
+  "license": "https://spdx.org/licenses/BSD-3-Clause.html",
+  "programmingLanguage": "Python",
+  "runtimePlatform": "Python 3.10 or newer; compatible geospatial native libraries required",
+  "applicationCategory": "Scientific research software",
+  "keywords": [
+    "Sus scrofa",
+    "species distribution modelling",
+    "habitat suitability",
+    "France",
+    "MaxEnt",
+    "LightGBM",
+    "remote sensing",
+    "multitemporal modelling",
+    "leave-one-year-out validation",
+    "wildlife-vehicle collisions"
+  ],
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Adrian Ferdinand",
+      "familyName": "Meyer",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Institute Geomatics, FHNW; Department of Geography, University of Zurich"
+      }
+    },
+    {
+      "@type": "Person",
+      "givenName": "Théo",
+      "familyName": "Reibel",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Institute Geomatics, FHNW"
+      }
+    }
+  ],
+  "maintainer": {
+    "@type": "Person",
+    "givenName": "Adrian Ferdinand",
+    "familyName": "Meyer",
+    "email": "adrian.meyer@fhnw.ch"
+  },
+  "citation": {
+    "@type": "ScholarlyArticle",
+    "name": "Wild Boar Collision Data and Satellite Computer Vision Refine Habitat Suitability Mapping across France",
+    "identifier": "https://doi.org/10.21203/rs.3.rs-8798859/v1",
+    "url": "https://www.researchsquare.com/article/rs-8798859/v1"
+  },
+  "readme": "https://github.com/waldstrom/wildboar-france-multitemp-sdm/blob/main/README.md",
+  "softwareRequirements": "See requirements.txt; a complete historical environment is not included."
+}

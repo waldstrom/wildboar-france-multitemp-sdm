@@ -25,5 +25,11 @@ jobs:
       - name: Reject tracked data and generated artefacts
         run: python scripts/validate_repository.py
 
+      - name: Install lightweight documentation dependency
+        run: python -m pip install "PyYAML>=6,<7"
+
+      - name: Validate configurations, links and metadata
+        run: python scripts/validate_documentation.py
+
       - name: Compile Python sources
         run: python -m compileall -q scripts review review-corrections.py review-finalize-existing-run.py

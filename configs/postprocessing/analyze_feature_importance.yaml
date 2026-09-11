@@ -1,0 +1,35 @@
+# Configuration for scripts/analyze_feature_importance.py
+#
+# Provide absolute or relative paths (relative paths are resolved against the
+# location of this YAML file).
+meta_runs:
+  # all_points:
+  #   best_runs: /path/to/meta_run_all_points/best_runs.csv
+  #   feature_importance_dirs:
+  #     - /path/to/multitemporal_feature_importance
+  #     - /path/to/monotemporal_feature_importance
+  #   # Optionally store VIF tables next to permutation outputs. When
+  #   # ``compute_vif`` is enabled the script will first create the feature
+  #   # importance artefacts and comparisons. Afterwards it will attempt to
+  #   # gather VIF tables (``vif.csv``, ``vif_summary.csv``, or
+  #   # ``variable_vif.csv``) for each combo. If no table is found, VIF values
+  #   # are computed from available predictor matrices and written to separate
+  #   # files in the ``vif_outputs`` directory.
+  # gbif_only:
+  #   best_runs: /path/to/meta_run_gbif_only/best_runs.csv
+  #   feature_importance_dirs:
+  #     - /path/to/gbif/multitemporal_feature_importance
+  #     - /path/to/gbif/monotemporal_feature_importance
+
+# Optional pairwise comparisons to compute. Each entry must correspond to the
+# labels defined under ``meta_runs`` above.
+comparisons:
+  # - [all_points, gbif_only]
+
+# Output directory for generated CSV artefacts. Relative paths are evaluated
+# from the YAML file location. Defaults to ``analysis_outputs`` if omitted.
+output_directory: ../../outputs/feature_importance_analysis
+
+# Toggle whether variance inflation factor (VIF) analysis should run. When
+# ``false`` only feature importance artefacts are produced.
+compute_vif: true

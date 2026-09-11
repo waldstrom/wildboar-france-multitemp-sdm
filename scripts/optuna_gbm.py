@@ -345,7 +345,7 @@ def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
     parser = argparse.ArgumentParser(description="Tune LightGBM hyperparameters with Optuna")
-    parser.add_argument("--config", default="configtuning.yaml", help="YAML tuning configuration")
+    parser.add_argument("--config", default="configs/tuning/configtuning.yaml", help="YAML tuning configuration")
     args = parser.parse_args()
 
     cfg_full = load_config(args.config)

@@ -1,54 +1,43 @@
-# Publishing this code without publishing the data
+# Public code releases
 
-The current repository has historically contained research data and derived geospatial files. Deleting those files in a later commit removes them from the current checkout, **not from Git history**. Therefore, do not make the existing repository public merely because the publication branch is data-free.
+[Repository home](../README.md) · [Licence](LICENSING.md) · [Reproduction status](REPRODUCIBILITY.md)
 
-## Recommended release procedure
+This repository is the public code-only companion. Its working tree contains code, configurations, documentation and tests; input data and generated research outputs belong in separate authorized storage.
 
-1. Review and merge the data-free publication changes into the private working branch if desired.
-2. Create a history-free export of the approved commit:
-
-   ```bash
-   bash scripts/export_code_only.sh ../maxent-code-only
-   ```
-
-   On Windows PowerShell:
-
-   ```powershell
-   .\scripts\export_code_only.ps1 -Destination ..\maxent-code-only
-   ```
-
-3. Inspect the exported directory and run the included validator again.
-4. Create a new, empty public repository and initialise the export as a new Git history:
-
-   ```bash
-   cd ../maxent-code-only
-   git init -b main
-   git add .
-   git commit -m "Initial public code release"
-   git remote add origin <NEW-EMPTY-REPOSITORY-URL>
-   git push -u origin main
-   ```
-
-5. Select and add an open-source licence only after confirming institutional, collaborator and third-party obligations.
-6. Add the article DOI and software release tag when available.
-
-## Why a new repository is safer
-
-A new root commit excludes historical data blobs, old generated outputs, deleted credentials and accidental local paths by construction. Rewriting the complete history of the private research repository is possible with tools such as `git filter-repo`, but it is disruptive, invalidates commit hashes and requires every clone and remote reference to be coordinated. A clean export avoids that risk.
-
-## Final publication checks
-
-Run:
+## Before a release
 
 ```bash
 python scripts/validate_repository.py
-python -m compileall -q scripts review
+python scripts/validate_documentation.py
+python -m compileall -q scripts review review-corrections.py review-finalize-existing-run.py
 ```
 
-Then inspect the complete tracked-file list:
+Run relevant synthetic tests for code changes. Check the diff for missing configuration references, accidental outputs and source-specific licence notices. Record the exact commit used for a release. Repository checks do not establish numerical reproduction of the manuscript.
+
+## Exporting the approved commit
+
+The existing export helpers produce an independent code tree:
 
 ```bash
-git ls-files
+bash scripts/export_code_only.sh ../wildboar-france-code-only
 ```
 
-The public repository should contain source code, YAML configuration, tests and Markdown documentation only. It should not contain occurrence records, raster/vector layers, model artefacts, caches, figures, office documents or publication working files.
+Windows PowerShell:
+
+```powershell
+.\scripts\export_code_only.ps1 -Destination ..\wildboar-france-code-only
+```
+
+Use a new destination directory; the helpers refuse to overwrite an existing one. They use the committed tree; uncommitted changes are not an approved release snapshot. The [ZIP workflow](../.github/workflows/build-data-free-zip.yml) also produces a code-only archive for main-branch pull requests or a manual workflow dispatch. It validates the archive contents before upload.
+
+Retain [LICENSE](../LICENSE), [CITATION.cff](../CITATION.cff), [codemeta.json](../codemeta.json), data acquisition guides and the config catalog in exports. The configuration moves do not remove the legacy experiment records.
+
+## Archival metadata
+
+When a real versioned release is made, record its tag/date and archive DOI in software metadata. Keep the preferred study DOI separate. Do not use the preprint DOI as a software identifier or imply the reviewed manuscript has a final journal DOI before that is verified.
+
+Store permitted research outputs in an appropriate separate archive, with producing commit/configuration, environment and source-data terms. A data-free software archive does not by itself reproduce maps and tables.
+
+## Exporting from the private research repository
+
+If creating another public snapshot from a private working repository, use a fresh history-free export. Deleting data in a later commit does not remove earlier blobs from Git history. This warning concerns exporting private research history; it does not assert that the current public repository contains restricted data in its history.

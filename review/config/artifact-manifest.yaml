@@ -1,71 +1,73 @@
+# Current reviewed-document references are separate from stable historical directories.
 schema_version: 1
-ordering_rule: >
-  Export all corrected manuscript artifacts first, in manuscript reading order,
-  followed by supplement artifacts in supplement order.
+ordering_rule: 'Export all corrected manuscript artifacts first, in manuscript reading order, followed
+  by supplement artifacts in supplement order.
 
+  '
 artifacts:
-  - order: 1
-    section: manuscript
-    label: "Table 2 — LOYO model performance"
-    directory: "03_MANUSCRIPT/01_Table_2_LOYO_model_performance"
-    affected_reason: "All winter-monotemporal rows and summaries depend on the corrected candidate stack."
-
-  - order: 2
-    section: manuscript
-    label: "Main LOYO performance figure(s)"
-    directory: "03_MANUSCRIPT/02_Figure_LOYO_performance"
-    affected_reason: "Any panel containing winter-monotemporal CBI/AUC values must be redrawn."
-
-  - order: 3
-    section: manuscript
-    label: "2019 winter prediction comparison"
-    directory: "03_MANUSCRIPT/03_Figure_2019_winter_prediction_maps"
-    affected_reason: "The winter-monotemporal prediction panels change; matched reference panels are regenerated."
-
-  - order: 4
-    section: manuscript
-    label: "Winter feature importance"
-    directory: "03_MANUSCRIPT/04_Figure_winter_feature_importance"
-    affected_reason: "The fitted models and candidate predictor set change."
-
-  - order: 5
-    section: manuscript
-    label: "Results-text numerical replacement register"
-    directory: "03_MANUSCRIPT/05_Manuscript_numeric_replacement_register"
-    affected_reason: "Reported winter-monotemporal values must match the corrected run."
-
-  - order: 6
-    section: supplement
-    label: "Supplement S5 — corrected configuration"
-    directory: "04_SUPPLEMENT/01_Supplement_S5_corrected_configuration"
-    affected_reason: "The published false hunting setting is the reviewer-identified confound."
-
-  - order: 7
-    section: supplement
-    label: "Supplement S6 — fold-wise performance and confidence intervals"
-    directory: "04_SUPPLEMENT/02_Supplement_S6_foldwise_performance_and_CI"
-    affected_reason: "All corrected held-out-year metrics and aggregate confidence intervals must be re-exported."
-
-  - order: 8
-    section: supplement
-    label: "Supplement S7 — feature provenance"
-    directory: "04_SUPPLEMENT/03_Supplement_S7_feature_provenance_and_hunting_audit"
-    affected_reason: "Candidate inclusion and filtering retention must be documented fold by fold."
-
-  - order: 9
-    section: supplement
-    label: "Response curves and full feature importance"
-    directory: "04_SUPPLEMENT/04_Supplement_response_curves_and_full_importance"
-    affected_reason: "Both products depend on the fitted winter-monotemporal models."
-
-  - order: 10
-    section: supplement
-    label: "MESS / NT1 / NT2 novelty diagnostics"
-    directory: "04_SUPPLEMENT/05_Supplement_MESS_NT1_NT2_novelty"
-    affected_reason: "Corrected monotemporal stacks and predictions change the novelty diagnostics and comparisons."
-
-  - order: 11
-    section: supplement
-    label: "Full corrected winter held-out-year maps"
-    directory: "04_SUPPLEMENT/06_Supplement_full_corrected_winter_maps"
-    affected_reason: "Every winter-monotemporal fold map is derived from the corrected model."
+- order: 1
+  section: manuscript
+  label: Table 3 - LOYO model performance (historical directory name retained)
+  directory: 03_MANUSCRIPT/01_Table_2_LOYO_model_performance
+  affected_reason: All winter-monotemporal rows and summaries depend on the corrected candidate stack.
+  document_reference: Table 3; S6a
+- order: 2
+  section: manuscript
+  label: Main LOYO performance figure(s)
+  directory: 03_MANUSCRIPT/02_Figure_LOYO_performance
+  affected_reason: Any panel containing winter-monotemporal CBI/AUC values must be redrawn.
+  document_reference: Table 3; S6a (supporting diagnostics)
+- order: 3
+  section: manuscript
+  label: 2019 winter prediction comparison
+  directory: 03_MANUSCRIPT/03_Figure_2019_winter_prediction_maps
+  affected_reason: The winter-monotemporal prediction panels change; matched reference panels are regenerated.
+  document_reference: Fig. 6; S8
+- order: 4
+  section: manuscript
+  label: Winter feature importance
+  directory: 03_MANUSCRIPT/04_Figure_winter_feature_importance
+  affected_reason: The fitted models and candidate predictor set change.
+  document_reference: Table 4; S6b
+- order: 5
+  section: manuscript
+  label: Results-text numerical replacement register
+  directory: 03_MANUSCRIPT/05_Manuscript_numeric_replacement_register
+  affected_reason: Reported winter-monotemporal values must match the corrected run.
+  document_reference: Results and Discussion
+- order: 6
+  section: supplement
+  label: Supplement S5 — corrected configuration
+  directory: 04_SUPPLEMENT/01_Supplement_S5_corrected_configuration
+  affected_reason: The published false hunting setting is the reviewer-identified confound.
+  document_reference: S5
+- order: 7
+  section: supplement
+  label: Supplement S6a - fold-wise performance and confidence intervals
+  directory: 04_SUPPLEMENT/02_Supplement_S6_foldwise_performance_and_CI
+  affected_reason: All corrected held-out-year metrics and aggregate confidence intervals must be re-exported.
+  document_reference: S6a
+- order: 8
+  section: supplement
+  label: Predictor provenance and hunting audit (historical S7 directory)
+  directory: 04_SUPPLEMENT/03_Supplement_S7_feature_provenance_and_hunting_audit
+  affected_reason: Candidate inclusion and filtering retention must be documented fold by fold.
+  document_reference: Internal predictor audit supporting S4/S6b; not current S7
+- order: 9
+  section: supplement
+  label: Response curves and full feature importance
+  directory: 04_SUPPLEMENT/04_Supplement_response_curves_and_full_importance
+  affected_reason: Both products depend on the fitted winter-monotemporal models.
+  document_reference: S7 (response curves); S6b (importance)
+- order: 10
+  section: supplement
+  label: MESS / NT1 / NT2 novelty diagnostics
+  directory: 04_SUPPLEMENT/05_Supplement_MESS_NT1_NT2_novelty
+  affected_reason: Corrected monotemporal stacks and predictions change the novelty diagnostics and comparisons.
+  document_reference: Fig. 8; S9
+- order: 11
+  section: supplement
+  label: Full corrected winter held-out-year maps
+  directory: 04_SUPPLEMENT/06_Supplement_full_corrected_winter_maps
+  affected_reason: Every winter-monotemporal fold map is derived from the corrected model.
+  document_reference: S8 (winter subset)

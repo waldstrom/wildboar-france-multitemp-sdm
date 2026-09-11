@@ -2,7 +2,7 @@ name: Build data-free ZIP
 
 on:
   pull_request:
-    branches: [review-iteration]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -23,23 +23,30 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install lightweight documentation dependency
+        run: python -m pip install "PyYAML>=6,<7"
+
+      - name: Validate documentation and configuration
+        run: python scripts/validate_documentation.py
+
       - name: Validate data-free repository
         run: python scripts/validate_repository.py
 
       - name: Build history-free export
         run: |
           mkdir -p artifact
-          git archive --format=tar --prefix=maxent-code-only/ HEAD | tar -xf - -C artifact
+          git archive --format=tar --prefix=wildboar-france-code-only/ HEAD | tar -xf - -C artifact
           find artifact -type d -name .git -prune -exec rm -rf {} +
-          cd artifact/maxent-code-only
-          python scripts/validate_repository.py
+          cd artifact/wildboar-france-code-only
+          python scripts/validate_repository.py --root . --all-files
+          python scripts/validate_documentation.py --root . --all-files
           cd ..
-          zip -qr ../maxent-code-only.zip maxent-code-only
+          zip -qr ../wildboar-france-code-only.zip wildboar-france-code-only
 
       - name: Upload ZIP
         uses: actions/upload-artifact@v4
         with:
-          name: maxent-code-only-zip
-          path: maxent-code-only.zip
+          name: wildboar-france-code-only-zip
+          path: wildboar-france-code-only.zip
           if-no-files-found: error
           retention-days: 7

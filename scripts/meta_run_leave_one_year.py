@@ -15,10 +15,12 @@ Usage
 
 .. code-block:: console
 
-   python -m scripts.meta_run_leave_one_year --config config_gbm_loyo_compare.yaml
+   python -m scripts.meta_run_leave_one_year --config configs/reviewed/loyo_all_sources.yaml
 
+The default uses the reviewed all-source starting preset. See
+``docs/REPRODUCIBILITY.md`` for tuning and importance-export scope.
 The configuration file follows the same structure as
-``config_gbm-compare.yaml`` but must enable ``run_test_year: all`` so the
+``configs/experiments/config_gbm-compare.yaml`` but must enable ``run_test_year: all`` so the
 underlying modelling scripts iterate across every available year.
 """
 
@@ -521,7 +523,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--config",
-        default="config_gbm_loyo_compare.yaml",
+        default="configs/reviewed/loyo_all_sources.yaml",
         help="Aggregate YAML containing scenario definitions",
     )
     parser.add_argument(
